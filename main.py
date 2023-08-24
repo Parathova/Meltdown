@@ -3,6 +3,7 @@
 
 
 import pygame as pyg
+import time
 import sys
 
 
@@ -13,6 +14,7 @@ HEIGHT = 600
 FPS = 144
 
 tab = 0 #count for which tab we are currently on (0-3)
+ticks = 0
 WIN = pyg.display.set_mode((WIDTH, HEIGHT))
 pyg.display.set_caption("Meltdown")
 pyg.display.set_icon(pyg.image.load("assets/img/icon.png"))
@@ -33,6 +35,7 @@ money_amt = 0 # tracks money amt
 def imgImport(name, w, h, rot=0):
     return pyg.transform.rotate(pyg.transform.scale(pyg.image.load("assets/img/" + name), (w, h)), rot)
 
+EPOCH = time.time() * 1000
 BACKIMG = imgImport("background_img.png", WIDTH, HEIGHT)
 WORLD = imgImport("world.png", int(WIDTH*0.8), int(HEIGHT*0.58))
 TAB1 = imgImport("tab1.png", WIDTH, 0.35*HEIGHT)
@@ -43,6 +46,9 @@ POL_BAR = imgImport("pol_bar.png", WIDTH*0.05, HEIGHT*0.5)
 
 pyg.font.init()
 doc_font = pyg.font.Font("assets/fonts/ShareTech.ttf", 16)
+
+def time_passed():
+    return int(time.time() * 1000 - EPOCH)
 
 def draw_text(text, x, y, color):
     ##print(str(x) +  " " + str(y))
@@ -93,8 +99,8 @@ def money_tick(amt):
     money_amt += amt
 
 def main():
-    global tab
-    clock = pyg.time.Clock() #controlls fps and whatnot
+    global tab, ticks
+    #clock = pyg.time.Clock() #controlls fps and whatnot
     pyg.mouse.set_cursor(pyg.cursors.diamond)
     
      
@@ -104,13 +110,14 @@ def main():
     # game loop. this will be active to run the game
     pyg.init()
     while run:
-        clock.tick(FPS) #again, controls fps 
-        
+        #clock.tick(FPS) #again, controls fps 
+        print(time_passed())
 
-        if(int(pyg.time.get_ticks()) % 50 == 0):
+        if(int(time_passed()/500) > ticks):
+            ticks += 1
             pol_tick()
             money_tick(2)
-            ##print("--------")
+            print("--------")
             
 
         
