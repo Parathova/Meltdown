@@ -11,6 +11,8 @@ FPS = 60
 tab = 0 #count for which tab we are currently on (0-3)
 WIN = pyg.display.set_mode((WIDTH, HEIGHT))
 pyg.display.set_caption("Meltdown")
+pyg.display.set_icon(pyg.image.load("assets/img/icon.png"))
+
 
 # Tab buttons (x, y, width, height)
 tab1_rect = pyg.Rect(0, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT/24)
