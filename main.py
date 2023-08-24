@@ -3,10 +3,14 @@
 
 
 import pygame as pyg
+import sys
+
+
+
 
 WIDTH = 900
 HEIGHT = 600
-FPS = 60
+FPS = 144
 
 tab = 0 #count for which tab we are currently on (0-3)
 WIN = pyg.display.set_mode((WIDTH, HEIGHT))
@@ -23,8 +27,8 @@ tab4_rect = pyg.Rect(WIDTH*0.75, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT/24)
 #the bar covering the pollution img (to hide progress ig)
 pol_bar_rect = pyg.Rect(WIDTH*0.025, HEIGHT*0.1233, WIDTH*0.045, HEIGHT*0.415)
 
-pol_amt = 0.0
-money_amt = 0
+pol_amt = 0.0 # tracks pollution amt
+money_amt = 0 # tracks money amt
 
 def imgImport(name, w, h, rot=0):
     return pyg.transform.rotate(pyg.transform.scale(pyg.image.load("assets/img/" + name), (w, h)), rot)
@@ -41,7 +45,7 @@ pyg.font.init()
 doc_font = pyg.font.Font("assets/fonts/ShareTech.ttf", 16)
 
 def draw_text(text, x, y, color):
-    print(x, " ", y)
+    ##print(str(x) +  " " + str(y))
     img = doc_font.render(text, True, color)
     WIN.blit(img, (x, y))
 
@@ -62,7 +66,7 @@ def draw():
         case 0:
             WIN.blit(TAB1, (0, HEIGHT*0.65))
 
-            #print("1")
+            ###print("1")
         case 1:
             WIN.blit(TAB2, (0, HEIGHT*0.65))
         
@@ -77,7 +81,7 @@ def draw():
     pyg.draw.rect(WIN, (96, 107, 94), pyg.Rect(WIDTH*0.035, HEIGHT*0.1533, WIDTH*0.045, HEIGHT*0.415*(1 - pol_amt/1)))
 
     # balance text
-    draw_text(("Balance: $" + str(money_amt) + "K" ), WIDTH*0.01, HEIGHT*0.04, (200, 200, 200))
+    draw_text(("Balance: $" + f"{money_amt:,}" + " " ), WIDTH*0.01, HEIGHT*0.04, (200, 200, 200))
     pyg.display.update()
 
 def pol_tick():
@@ -96,14 +100,17 @@ def main():
      
 
     run = True
+    
     # game loop. this will be active to run the game
     pyg.init()
     while run:
         clock.tick(FPS) #again, controls fps 
+        
 
         if(int(pyg.time.get_ticks()) % 50 == 0):
             pol_tick()
-            #print("--------")
+            money_tick(2)
+            ##print("--------")
             
 
         
@@ -116,27 +123,27 @@ def main():
                     mx, my = pyg.mouse.get_pos()
                     if tab1_rect.collidepoint(mx, my) and tab != 0:
                         money_tick(5)
-                        print("clicked1")
+                        #print("clicked1")
                         tab = 0
-                        print(tab)
+                        #print(tab)
 
                     elif tab2_rect.collidepoint(mx, my) and tab != 1:
-                        money_tick(5)
-                        print("clicked2")
+                        money_tick(10000)
+                        #print("clicked2")
                         tab = 1
-                        print(tab)
+                        #print(tab)
                     
                     elif tab3_rect.collidepoint(mx, my) and tab != 2:
                         money_tick(5)
-                        print("clicked3")
+                        #print("clicked3")
                         tab = 2
-                        print(tab)
+                        #print(tab)
                     
                     elif tab4_rect.collidepoint(mx, my) and tab != 3:
                         money_tick(5)
-                        print("clicked4")
+                        #print("clicked4")
                         tab = 3
-                        print(tab)
+                        #print(tab)
 
         keys_pressed = pyg.key.get_pressed()
         
@@ -144,7 +151,7 @@ def main():
 
         # game is over
 
-        #print(pol_amt)
+        ##print(pol_amt)
         
 
 
