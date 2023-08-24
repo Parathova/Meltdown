@@ -19,9 +19,12 @@ tab1_rect = pyg.Rect(0, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT/24)
 tab2_rect = pyg.Rect(WIDTH*0.25, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT/24)
 tab3_rect = pyg.Rect(WIDTH*0.5, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT/24)
 tab4_rect = pyg.Rect(WIDTH*0.75, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT/24)
+
+#the bar covering the pollution img (to hide progress ig)
 pol_bar_rect = pyg.Rect(WIDTH*0.025, HEIGHT*0.1233, WIDTH*0.045, HEIGHT*0.415)
 
 pol_amt = 0.0
+money_amt = 0
 
 def imgImport(name, w, h, rot=0):
     return pyg.transform.rotate(pyg.transform.scale(pyg.image.load("assets/img/" + name), (w, h)), rot)
@@ -34,8 +37,17 @@ TAB3 = imgImport("tab3.png", WIDTH, 0.35*HEIGHT)
 TAB4 = imgImport("tab4.png", WIDTH, 0.35*HEIGHT)
 POL_BAR = imgImport("pol_bar.png", WIDTH*0.05, HEIGHT*0.5)
 
+pyg.font.init()
+doc_font = pyg.font.Font("assets/fonts/ShareTech.ttf", 16)
+
+def draw_text(text, x, y, color):
+    print(x, " ", y)
+    img = doc_font.render(text, True, color)
+    WIN.blit(img, (x, y))
+
 def draw():
     
+
     #WIN.fill((0, 0, 0))
     WIN.blit(BACKIMG, (0, 0)) #putting images at coordinates (origin top left)
     WIN.blit(WORLD, (WIDTH*0.18, HEIGHT*0.05))
@@ -60,14 +72,21 @@ def draw():
         case 3:
             WIN.blit(TAB4, (0, HEIGHT*0.65))
 
-    WIN.blit(POL_BAR, (WIDTH*0.02, HEIGHT*0.05))            
-    pyg.draw.rect(WIN, (96, 107, 94), pyg.Rect(WIDTH*0.025, HEIGHT*0.1233, WIDTH*0.045, HEIGHT*0.415*(1 - pol_amt/1)))
+    # pollution bar
+    WIN.blit(POL_BAR, (WIDTH*0.03, HEIGHT*0.08))            
+    pyg.draw.rect(WIN, (96, 107, 94), pyg.Rect(WIDTH*0.035, HEIGHT*0.1533, WIDTH*0.045, HEIGHT*0.415*(1 - pol_amt/1)))
 
+    # balance text
+    draw_text(("Balance: $" + str(money_amt) + "K" ), WIDTH*0.01, HEIGHT*0.04, (200, 200, 200))
     pyg.display.update()
 
 def pol_tick():
     global pol_amt
     pol_amt += 0.01
+
+def money_tick(amt):
+    global money_amt
+    money_amt += amt
 
 def main():
     global tab
@@ -96,21 +115,25 @@ def main():
                 if event.button == 1: #left/primary click
                     mx, my = pyg.mouse.get_pos()
                     if tab1_rect.collidepoint(mx, my) and tab != 0:
+                        money_tick(5)
                         print("clicked1")
                         tab = 0
                         print(tab)
 
                     elif tab2_rect.collidepoint(mx, my) and tab != 1:
+                        money_tick(5)
                         print("clicked2")
                         tab = 1
                         print(tab)
                     
                     elif tab3_rect.collidepoint(mx, my) and tab != 2:
+                        money_tick(5)
                         print("clicked3")
                         tab = 2
                         print(tab)
                     
                     elif tab4_rect.collidepoint(mx, my) and tab != 3:
+                        money_tick(5)
                         print("clicked4")
                         tab = 3
                         print(tab)
