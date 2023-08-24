@@ -62,6 +62,7 @@ def draw():
 def main():
     global tab
     clock = pyg.time.Clock() #controlls fps and whatnot
+    pyg.mouse.set_cursor(pyg.cursors.diamond)
 
     run = True
     # game loop. this will be active to run the game
