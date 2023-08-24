@@ -19,6 +19,7 @@ tab1_rect = pyg.Rect(0, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT/24)
 tab2_rect = pyg.Rect(WIDTH*0.25, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT/24)
 tab3_rect = pyg.Rect(WIDTH*0.5, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT/24)
 tab4_rect = pyg.Rect(WIDTH*0.75, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT/24)
+pol_bar_rect = pyg.Rect(WIDTH*0.025, HEIGHT*0.1233, WIDTH*0.045, HEIGHT*0.415)
 
 pol_amt = 0.0
 
@@ -31,12 +32,13 @@ TAB1 = imgImport("tab1.png", WIDTH, 0.35*HEIGHT)
 TAB2 = imgImport("tab2.png", WIDTH, 0.35*HEIGHT)
 TAB3 = imgImport("tab3.png", WIDTH, 0.35*HEIGHT)
 TAB4 = imgImport("tab4.png", WIDTH, 0.35*HEIGHT)
+POL_BAR = imgImport("pol_bar.png", WIDTH*0.05, HEIGHT*0.5)
 
 def draw():
     
     #WIN.fill((0, 0, 0))
     WIN.blit(BACKIMG, (0, 0)) #putting images at coordinates (origin top left)
-    WIN.blit(WORLD, (WIDTH*0.08, HEIGHT*0.05))
+    WIN.blit(WORLD, (WIDTH*0.18, HEIGHT*0.05))
     
     """ pyg.draw.rect(WIN, (50, 50, 50), tab1_rect)
     pyg.draw.rect(WIN, (100, 100, 100), tab2_rect)
@@ -57,8 +59,9 @@ def draw():
         
         case 3:
             WIN.blit(TAB4, (0, HEIGHT*0.65))
-            
 
+    WIN.blit(POL_BAR, (WIDTH*0.02, HEIGHT*0.05))            
+    pyg.draw.rect(WIN, (96, 107, 94), pyg.Rect(WIDTH*0.025, HEIGHT*0.1233, WIDTH*0.045, HEIGHT*0.415*(1 - pol_amt/1)))
 
     pyg.display.update()
 
