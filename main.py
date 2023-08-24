@@ -20,6 +20,7 @@ tab2_rect = pyg.Rect(WIDTH*0.25, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT/24)
 tab3_rect = pyg.Rect(WIDTH*0.5, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT/24)
 tab4_rect = pyg.Rect(WIDTH*0.75, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT/24)
 
+pol_amt = 0.0
 
 def imgImport(name, w, h, rot=0):
     return pyg.transform.rotate(pyg.transform.scale(pyg.image.load("assets/img/" + name), (w, h)), rot)
@@ -61,15 +62,29 @@ def draw():
 
     pyg.display.update()
 
+def pol_tick():
+    global pol_amt
+    pol_amt += 0.01
+
 def main():
     global tab
     clock = pyg.time.Clock() #controlls fps and whatnot
     pyg.mouse.set_cursor(pyg.cursors.diamond)
+    
+     
 
     run = True
     # game loop. this will be active to run the game
+    pyg.init()
     while run:
         clock.tick(FPS) #again, controls fps 
+
+        if(int(pyg.time.get_ticks()) % 50 == 0):
+            pol_tick()
+            #print("--------")
+            
+
+        
         
         for event in pyg.event.get():
             if event.type == pyg.QUIT: run = False
@@ -100,7 +115,12 @@ def main():
         keys_pressed = pyg.key.get_pressed()
         
 
-        print(tab)
+
+        # game is over
+
+        #print(pol_amt)
+        
+
 
         draw()
         #updates display. display wont change if this isnt here
