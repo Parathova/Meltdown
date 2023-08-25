@@ -12,6 +12,7 @@ import sys
 WIDTH = 900
 HEIGHT = 600
 TICK_RATE = 500 #low is faster ticks
+POL_CAP = 5000
 
 tab = 0 #count for which tab we are currently on (0-3)
 ticks = 0
@@ -30,7 +31,10 @@ tab4_rect = pyg.Rect(WIDTH*0.75, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT*0.048)
 pol_bar_rect = pyg.Rect(WIDTH*0.025, HEIGHT*0.1233, WIDTH*0.045, HEIGHT*0.415)
 
 pol_amt = 0.0 # tracks pollution amt
-money_amt = 0 # tracks money amt
+money_amt = 0.0 # tracks money amt
+
+pol_rate = 0.1
+money_rate = 0.15
 
 def imgImport(name, w, h, rot=0):
     return pyg.transform.rotate(pyg.transform.scale(pyg.image.load("assets/img/" + name), (w, h)), rot)
@@ -84,22 +88,22 @@ def draw():
 
     # pollution bar
     WIN.blit(POL_BAR, (WIDTH*0.03, HEIGHT*0.08))            
-    pyg.draw.rect(WIN, (96, 107, 94), pyg.Rect(WIDTH*0.035, HEIGHT*0.1533, WIDTH*0.045, HEIGHT*0.415*(1 - pol_amt/1)))
+    pyg.draw.rect(WIN, (96, 107, 94), pyg.Rect(WIDTH*0.035, HEIGHT*0.1533, WIDTH*0.045, HEIGHT*0.415*(1 - pol_amt/POL_CAP)))
 
     # balance text
-    draw_text(("Balance: $" + f"{money_amt:,}" + " " ), WIDTH*0.01, HEIGHT*0.04, (200, 200, 200))
+    draw_text(("Balance: $" + f"{round(money_amt, 2):,}" + " " ), WIDTH*0.01, HEIGHT*0.04, (200, 200, 200))
     pyg.display.update()
 
 def pol_tick():
     global pol_amt
-    pol_amt += 0.01
+    pol_amt += pol_rate
 
-def money_tick(amt):
+def money_tick():
     global money_amt
-    money_amt += amt
+    money_amt += money_rate
 
 def main():
-    global tab, ticks
+    global tab, ticks, pol_rate
     #clock = pyg.time.Clock() #controlls fps and whatnot
     pyg.mouse.set_cursor(pyg.cursors.diamond)
     
@@ -112,11 +116,12 @@ def main():
     while run:
         #clock.tick(FPS) #again, controls fps 
         print(time_passed())
+        
 
         if(int(time_passed()/TICK_RATE) > ticks):
             ticks += 1
             pol_tick()
-            money_tick(2)
+            money_tick()
             print("--------")
             
 
@@ -129,25 +134,25 @@ def main():
                 if event.button == 1: #left/primary click
                     mx, my = pyg.mouse.get_pos()
                     if tab1_rect.collidepoint(mx, my) and tab != 0:
-                        money_tick(5)
+                        #money_tick(5)
                         #print("clicked1")
                         tab = 0
                         #print(tab)
 
                     elif tab2_rect.collidepoint(mx, my) and tab != 1:
-                        money_tick(10000)
+                        #money_tick(10000)
                         #print("clicked2")
                         tab = 1
                         #print(tab)
                     
                     elif tab3_rect.collidepoint(mx, my) and tab != 2:
-                        money_tick(5)
+                        #money_tick(5)
                         #print("clicked3")
                         tab = 2
                         #print(tab)
                     
                     elif tab4_rect.collidepoint(mx, my) and tab != 3:
-                        money_tick(5)
+                        #money_tick(5)
                         #print("clicked4")
                         tab = 3
                         #print(tab)
