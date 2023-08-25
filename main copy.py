@@ -41,6 +41,8 @@ TAB3 = imgImport("tab3.png", WIDTH, 0.35*HEIGHT)
 TAB4 = imgImport("tab4.png", WIDTH, 0.35*HEIGHT)
 POL_BAR = imgImport("pol_bar.png", WIDTH*0.05, HEIGHT*0.5)
 
+
+
 pyg.font.init()
 doc_font = pyg.font.Font("assets/fonts/ShareTech.ttf", 16)
 
@@ -100,10 +102,15 @@ def main():
      
 
     run = True
-    
+    #thing to start the
+    Start = False
     # game loop. this will be active to run the game
     pyg.init()
-    while run:
+    
+
+
+    
+    while run == True:
         clock.tick(FPS) #again, controls fps 
         
 
@@ -117,10 +124,11 @@ def main():
         
         for event in pyg.event.get():
             if event.type == pyg.QUIT: run = False
+            mx, my = pyg.mouse.get_pos()
 
             if event.type == pyg.MOUSEBUTTONDOWN:
                 if event.button == 1: #left/primary click
-                    mx, my = pyg.mouse.get_pos()
+                    
                     if tab1_rect.collidepoint(mx, my) and tab != 0:
                         money_tick(5)
                         #print("clicked1")
@@ -144,9 +152,7 @@ def main():
                         #print("clicked4")
                         tab = 3
                         #print(tab)
-
         keys_pressed = pyg.key.get_pressed()
-        
 
 
         # game is over
