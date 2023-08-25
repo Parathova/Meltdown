@@ -46,7 +46,7 @@ BACKIMG = imgImport("background_img.png", WIDTH, HEIGHT)
 WORLDWATER = imgImport("Test_Background4.png", int(WIDTH*0.8), int(HEIGHT*0.58)).convert_alpha()
 alpha = 100
 WORLDWATERPOLLUTION = imgImport("Test_Background5.png", int(WIDTH*0.8), int(HEIGHT*0.58)).convert_alpha()
-alphaWater =10
+alpha_Water =10
 
 WORLD = imgImport("world.png", int(WIDTH*0.8), int(HEIGHT*0.58))
 TAB1 = imgImport("tab1.png", WIDTH, 0.35*HEIGHT)
@@ -73,7 +73,7 @@ def draw():
     WIN.blit(BACKIMG, (0, 0)) #putting images at coordinates (origin top left)
     WIN.blit(WORLDWATER, (WIDTH*0.18, HEIGHT*0.05)) #draw the water background 
     WIN.blit(WORLDWATERPOLLUTION, (WIDTH*0.18, HEIGHT*0.05)) #draw the water background green
-    #WORLDWATER.fill(190, 0, 0) # special_flags=pygame.BLEND_ADD) // COME BACK HERE 
+   
     WIN.blit(WORLD, (WIDTH*0.18, HEIGHT*0.05))
     
     """ pyg.draw.rect(WIN, (50, 50, 50), tab1_rect)
@@ -113,7 +113,7 @@ def money_tick():
     money_amt += money_rate
 
 def main():
-    global tab, ticks, pol_rate
+    global tab, ticks, pol_rate, alpha_Water
     #clock = pyg.time.Clock() #controlls fps and whatnot
     pyg.mouse.set_cursor(pyg.cursors.diamond)
     
@@ -175,10 +175,13 @@ def main():
 
         ##print(pol_amt)
         
-
+        pollutionCounter =+ 1 # useless delete later just trying something
         
         
-        WORLDWATERPOLLUTION.set_alpha(alphaWater)
+        if time_passed()%100 == 0:
+         alpha_Water=+ 30
+        
+        WORLDWATERPOLLUTION.set_alpha(alpha_Water) #opacityyy 
         WORLDWATER.set_alpha(alpha)
         draw()
         #updates display. display wont change if this isnt here

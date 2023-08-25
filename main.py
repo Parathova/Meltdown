@@ -53,6 +53,13 @@ def imgImport(name, w, h, rot=0):
 
 EPOCH = time.time() * 1000
 BACKIMG = imgImport("background_img.png", WIDTH, HEIGHT)
+
+#(PARTO) my additions coming in, trying to mess with opacity
+WORLDWATER = imgImport("Test_Background4.png", int(WIDTH*0.8), int(HEIGHT*0.58)).convert_alpha()
+alpha = 100
+WORLDWATERPOLLUTION = imgImport("Test_Background5.png", int(WIDTH*0.8), int(HEIGHT*0.58)).convert_alpha()
+alpha_Water =100 # IF THIS VALUE GETS HIGHER THE WATER GETS MORE POLLUTED (VALUE GOES TO 255 MAX)
+
 WORLD = imgImport("world.png", int(WIDTH*0.8), int(HEIGHT*0.58))
 TAB1 = imgImport("tab1.png", WIDTH, 0.35*HEIGHT)
 TAB2 = imgImport("tab2.png", WIDTH, 0.35*HEIGHT)
@@ -93,6 +100,8 @@ def draw():
     #WIN.fill((0, 0, 0))
     WIN.blit(BACKIMG, (0, 0)) #putting images at coordinates (origin top left)
     WIN.blit(WORLD, (WIDTH*0.18, HEIGHT*0.05))
+    WIN.blit(WORLDWATER, (WIDTH*0.18, HEIGHT*0.05)) #draw the water background 
+    WIN.blit(WORLDWATERPOLLUTION, (WIDTH*0.18, HEIGHT*0.05)) #draw the water background green
     WIN.blit(NEWS_BOX, (0.12*WIDTH, 0.3*HEIGHT))
     
     
@@ -154,7 +163,7 @@ def money_tick():
     money_amt += money_rate
 
 def main():
-    global tab, ticks, pol_rate, money_rate, pol_amt, money_amt, upgrade_track
+    global tab, ticks, pol_rate, money_rate, pol_amt, money_amt, upgrade_track, alpha_Water
     #clock = pyg.time.Clock() #controlls fps and whatnot
     pyg.mouse.set_cursor(pyg.cursors.diamond)
     
@@ -254,7 +263,8 @@ def main():
 
         ##print(pol_amt)
         
-
+        WORLDWATERPOLLUTION.set_alpha(alpha_Water) #opacityyy 
+        WORLDWATER.set_alpha(alpha)
 
         draw()
         #updates display. display wont change if this isnt here
