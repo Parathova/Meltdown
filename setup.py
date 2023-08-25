@@ -1,4 +1,4 @@
-import cx_Freeze, sys, Executable
+import cx_Freeze, sys
 
 base = None
 
