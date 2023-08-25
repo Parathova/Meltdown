@@ -5,14 +5,15 @@ base = None
 if sys.platform == 'win32':
     base = "Win32GUI"
 
-executables = [cx_Freeze.Executable("YOUR_PROGRAM.py", base=base, targetName="NAME_OF_EXE")]
+executables = [cx_Freeze.Executable("main.py", base = base, targetName = "meltdown")]
 
 cx_Freeze.setup(
-    name="NAME_OF_EXE",
-    options={"build_exe": {"packages": ["tkinter"], "include_files": [
-        "someImage.png", "anotherImage.png",
+    name = "meltdown",
+    options = {"build_exe": {"packages": ["tkinter"], "include_files": [
+        "background_img.png", "icon.png", "news.png", "pol_bar.png", "tab1.png",
+        "tab2.png", "tab3.png", "tab4.png", "water_1.png", "water_p_1.png", "world.png",
     ]}},
-    version="1.0",
-    description="DESCRIBE YOUR PROGRAM",
-    executables=executables
+    version = "1.0",
+    description = "Woo climate change",
+    executables = executables
 )
