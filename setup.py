@@ -1,19 +1,17 @@
-import cx_Freeze, sys
+import sys
+from cx_Freeze import setup, Executable
 
-base = None
+build_exe_options = {
+    "excludes": ["tkinter", "unittest"],
+    "zip_include_packages": ["encodings", "PySide6"],
+}
 
-if sys.platform == 'win32':
-    base = "Win32GUI"
+base = "Win32GUI" if sys.platform == "win32" else None
 
-executables = [cx_Freeze.Executable("main.py", base = base, targetName = "NAME_OF_EXE")]
-
-cx_Freeze.setup(
-    name = "meltdown",
-    options = {"build_exe": {"packages": ["tkinter"], "include_files": [
-        "background_img.png", "icon.png", "news.png", "pol_bar.png", "tab1.png",
-        "tab2.png", "tab3.png", "tab4.png", "water_1.png", "water_p_1.png", "world.png",
-    ]}},
-    version = "1.0",
-    description = "Woo climate change",
-    executables = executables
+setup(
+    name="guifoo",
+    version="0.1",
+    description="My GUI application!",
+    options={"build_exe": build_exe_options},
+    executables=[Executable("guifoo.py", base=base)],
 )
