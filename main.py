@@ -42,7 +42,7 @@ pol_amt = 0.0 # tracks pollution amt
 money_amt = 0.0 # tracks money amt
 
 pol_rate = 100
-money_rate = 0.15
+money_rate = 10.15
 
 upgrade_track = [0, 0, 0]
 upgrade_costs = [
@@ -78,10 +78,10 @@ lock = imgImport("buttons/lock.png", WIDTH*0.1, WIDTH*0.1)
 buy = imgImport("buttons/buy.png", WIDTH*0.1, WIDTH*0.1)
 
 #expansion descriptions
-exp_prov_des = imgImport("buttons/exp/exp_prov_des.png", WIDTH*0.1, WIDTH*0.1)
-exp_nat_des = imgImport("buttons/exp/exp_nat_des.png", WIDTH*0.1, WIDTH*0.1)
-exp_con_des = imgImport("buttons/exp/exp_con_des.png", WIDTH*0.1, WIDTH*0.1)
-exp_glo_des = imgImport("buttons/exp/exp_glo_des.png", WIDTH*0.1, WIDTH*0.1)
+exp_prov_des = imgImport("buttons/exp/exp_prov_des.png", WIDTH*0.12, WIDTH*0.12)
+exp_nat_des = imgImport("buttons/exp/exp_nat_des.png", WIDTH*0.12, WIDTH*0.12)
+exp_con_des = imgImport("buttons/exp/exp_con_des.png", WIDTH*0.12, WIDTH*0.12)
+exp_glo_des = imgImport("buttons/exp/exp_glo_des.png", WIDTH*0.12, WIDTH*0.12)
 
 
 
@@ -146,8 +146,14 @@ def draw():
                 WIN.blit(buy, (WIDTH*0.35, HEIGHT*0.78))
             
             # descriptions
-            if(exp_prov_rect.collidepoint(mx, my)):
-                WIN.blit(exp_prov_des, (WIDTH*0.04, HEIGHT*0.5))
+            if (exp_prov_rect.collidepoint(mx, my)):
+                WIN.blit(exp_prov_des, (WIDTH*0.04, HEIGHT*0.6))
+            elif exp_nat_rect.collidepoint(mx, my) and upgrade_track[0] > 0:
+                WIN.blit(exp_nat_des, (WIDTH*0.19, HEIGHT*0.6))
+            elif exp_con_rect.collidepoint(mx, my) and upgrade_track[0] > 1:
+                WIN.blit(exp_con_des, (WIDTH*0.34, HEIGHT*0.6))
+            elif exp_glo_rect.collidepoint(mx, my) and upgrade_track[0] > 2:
+                WIN.blit(exp_glo_des, (WIDTH*0.49, HEIGHT*0.6))
 
             
             ###print("1")
