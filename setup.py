@@ -8,6 +8,15 @@ build_exe_options = {
 
 base = "Win32GUI" if sys.platform == "win32" else None
 
+options = {
+    'build_exe': {
+        'include_files': {
+            os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'tk86t.dll'),
+            os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'tcl86t.dll'),
+        }
+    }
+}
+
 setup(
     name="Meltdown",
     version="0.1",
