@@ -11,7 +11,7 @@ import sys
 
 WIDTH = 900
 HEIGHT = 600
-FPS = 144
+TICK_RATE = 500 #low is faster ticks
 
 tab = 0 #count for which tab we are currently on (0-3)
 ticks = 0
@@ -21,10 +21,10 @@ pyg.display.set_icon(pyg.image.load("assets/img/icon.png"))
 
 
 # Tab buttons (x, y, width, height)
-tab1_rect = pyg.Rect(0, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT/24)
-tab2_rect = pyg.Rect(WIDTH*0.25, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT/24)
-tab3_rect = pyg.Rect(WIDTH*0.5, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT/24)
-tab4_rect = pyg.Rect(WIDTH*0.75, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT/24)
+tab1_rect = pyg.Rect(0, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT*0.048)
+tab2_rect = pyg.Rect(WIDTH*0.25, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT*0.048)
+tab3_rect = pyg.Rect(WIDTH*0.5, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT*0.048)
+tab4_rect = pyg.Rect(WIDTH*0.75, 0.675 * HEIGHT, WIDTH*0.25, HEIGHT*0.048)
 
 #the bar covering the pollution img (to hide progress ig)
 pol_bar_rect = pyg.Rect(WIDTH*0.025, HEIGHT*0.1233, WIDTH*0.045, HEIGHT*0.415)
@@ -113,7 +113,7 @@ def main():
         #clock.tick(FPS) #again, controls fps 
         print(time_passed())
 
-        if(int(time_passed()/500) > ticks):
+        if(int(time_passed()/TICK_RATE) > ticks):
             ticks += 1
             pol_tick()
             money_tick(2)
