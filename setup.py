@@ -9,10 +9,7 @@ executables = [cx_Freeze.Executable("main.py")]
 
 cx_Freeze.setup(
     name = "meltdown",
-    options = {"build_exe": {"packages": ["tkinter"], "include_files": [
-        "background_img.png", "icon.png", "news.png", "pol_bar.png", "tab1.png",
-        "tab2.png", "tab3.png", "tab4.png", "water_1.png", "water_p_1.png", "world.png",
-    ]}},
+    
     version = "1.0",
     description = "Woo climate change",
     executables = executables
