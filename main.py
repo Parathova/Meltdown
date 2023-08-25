@@ -18,7 +18,7 @@ tab = 0 #count for which tab we are currently on (0-3)
 ticks = 0
 WIN = pyg.display.set_mode((WIDTH, HEIGHT))
 pyg.display.set_caption("Meltdown")
-pyg.display.set_icon(pyg.image.load("assets/img/icon.png"))
+pyg.display.set_icon(pyg.image.load("build/exe.win-amd64-3.10/assets/img/icon.png"))
 
 
 # Tab buttons (x, y, width, height)
@@ -33,8 +33,10 @@ exp_nat_rect = pyg.Rect(WIDTH*0.20, HEIGHT*0.78, WIDTH*0.1, WIDTH*0.1)
 exp_con_rect = pyg.Rect(WIDTH*0.35, HEIGHT*0.78, WIDTH*0.1, WIDTH*0.1)
 exp_glo_rect = pyg.Rect(WIDTH*0.50, HEIGHT*0.78, WIDTH*0.1, WIDTH*0.1)
 
+
+
 #the bar covering the pollution img (to hide progress ig)
-pol_bar_rect = pyg.Rect(WIDTH*0.025, HEIGHT*0.1233, WIDTH*0.045, HEIGHT*0.415)
+#pol_bar_rect = pyg.Rect(WIDTH*0.025, HEIGHT*0.1223, WIDTH*0.045, HEIGHT*0.415)
 
 pol_amt = 0.0 # tracks pollution amt
 money_amt = 0.0 # tracks money amt
@@ -49,7 +51,7 @@ upgrade_costs = [
 news_queue = []
 
 def imgImport(name, w, h, rot=0):
-    return pyg.transform.rotate(pyg.transform.scale(pyg.image.load("assets/img/" + name), (w, h)), rot)
+    return pyg.transform.rotate(pyg.transform.scale(pyg.image.load("build/exe.win-amd64-3.10/assets/img/" + name), (w, h)), rot)
 
 EPOCH = time.time() * 1000
 BACKIMG = imgImport("background_img.png", WIDTH, HEIGHT)
@@ -68,18 +70,23 @@ TAB4 = imgImport("tab4.png", WIDTH, 0.35*HEIGHT)
 POL_BAR = imgImport("pol_bar.png", WIDTH*0.05, HEIGHT*0.5)
 NEWS_BOX = imgImport("news.png", WIDTH*.16, HEIGHT*.28)
 
-exp_prov = imgImport("buttons/exp_prov.png", WIDTH*0.1, WIDTH*0.1)
-exp_nat = imgImport("buttons/exp_nat.png", WIDTH*0.1, WIDTH*0.1)
-exp_con = imgImport("buttons/exp_con.png", WIDTH*0.1, WIDTH*0.1)
-exp_glo = imgImport("buttons/exp_glo.png", WIDTH*0.1, WIDTH*0.1)
+exp_prov = imgImport("buttons/exp/exp_prov.png", WIDTH*0.1, WIDTH*0.1)
+exp_nat = imgImport("buttons/exp/exp_nat.png", WIDTH*0.1, WIDTH*0.1)
+exp_con = imgImport("buttons/exp/exp_con.png", WIDTH*0.1, WIDTH*0.1)
+exp_glo = imgImport("buttons/exp/exp_glo.png", WIDTH*0.1, WIDTH*0.1)
 lock = imgImport("buttons/lock.png", WIDTH*0.1, WIDTH*0.1)
 buy = imgImport("buttons/buy.png", WIDTH*0.1, WIDTH*0.1)
 
+#expansion descriptions
+exp_prov_des = imgImport("buttons/exp/exp_prov_des.png", WIDTH*0.1, WIDTH*0.1)
+exp_nat_des = imgImport("buttons/exp/exp_nat_des.png", WIDTH*0.1, WIDTH*0.1)
+exp_con_des = imgImport("buttons/exp/exp_con_des.png", WIDTH*0.1, WIDTH*0.1)
+exp_glo_des = imgImport("buttons/exp/exp_glo_des.png", WIDTH*0.1, WIDTH*0.1)
 
 
 
 pyg.font.init()
-doc_font = pyg.font.Font("assets/fonts/ShareTech.ttf", 16)
+doc_font = pyg.font.Font("build/exe.win-amd64-3.10/assets/fonts/ShareTech.ttf", 16)
 
 
 
@@ -94,25 +101,11 @@ def draw_text(text, x, y, color):
 def not_enough(required, current):
     print('not enough')
 
-def blit_text(surface, text, pos, font, color=pyg.Color('black')):
-    words = [word.split(' ') for word in text.splitlines()]  # 2D array where each row is a list of words.
-    space = font.size(' ')[0]  # The width of a space.
-    max_width, max_height = surface.get_size()
-    x, y = pos
-    for line in words:
-        for word in line:
-            word_surface = font.render(word, 0, color)
-            word_width, word_height = word_surface.get_size()
-            if x + word_width >= max_width:
-                x = pos[0]  # Reset the x.
-                y += word_height  # Start on new row.
-            surface.blit(word_surface, (x, y))
-            x += word_width + space
-        x = pos[0]  # Reset the x.
-        y += word_height 
+
 
 def draw():
-    global exp_prov_rect    
+    
+    mx, my = pyg.mouse.get_pos()
 
     #WIN.fill((0, 0, 0))
     WIN.blit(BACKIMG, (0, 0)) #putting images at coordinates (origin top left)
@@ -152,6 +145,10 @@ def draw():
             if(upgrade_track[0] > 2):
                 WIN.blit(buy, (WIDTH*0.35, HEIGHT*0.78))
             
+            # descriptions
+            if(exp_prov_rect.collidepoint(mx, my)):
+                WIN.blit(exp_prov_des, (WIDTH*0.04, HEIGHT*0.5))
+
             
             ###print("1")
         case 1:
@@ -165,10 +162,10 @@ def draw():
 
     # pollution bar
     WIN.blit(POL_BAR, (WIDTH*0.03, HEIGHT*0.08))            
-    pyg.draw.rect(WIN, (96, 107, 94), pyg.Rect(WIDTH*0.035, HEIGHT*0.1533, WIDTH*0.045, HEIGHT*0.415*(1 - pol_amt/POL_CAP)))
+    pyg.draw.rect(WIN, (96, 107, 94), pyg.Rect(WIDTH*0.035, HEIGHT*0.1525, WIDTH*0.045, HEIGHT*0.415*(1 - pol_amt/POL_CAP)))
 
 
-    blit_text(exp_prov_rect, "filler text is kinda bad", (0, 0), doc_font)
+
     # balance text
     draw_text(("Balance: $" + f"{round(money_amt, 2):,}" + "K " ), WIDTH*0.01, HEIGHT*0.04, (200, 200, 200))
     
