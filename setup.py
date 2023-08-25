@@ -5,7 +5,7 @@ base = None
 if sys.platform == 'win32':
     base = "Win32GUI"
 
-executables = [cx_Freeze.Executable("main.py")]
+executables = [cx_Freeze.Executable("C:\Users\michaelliu\Documents\GitHub\Meltdown\main.py")]
 
 cx_Freeze.setup(
     name = "meltdown",
