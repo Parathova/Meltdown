@@ -39,7 +39,7 @@ pol_bar_rect = pyg.Rect(WIDTH*0.025, HEIGHT*0.1233, WIDTH*0.045, HEIGHT*0.415)
 pol_amt = 0.0 # tracks pollution amt
 money_amt = 0.0 # tracks money amt
 
-pol_rate = 0.1
+pol_rate = 100
 money_rate = 0.15
 
 upgrade_track = [0, 0, 0]
@@ -55,10 +55,10 @@ EPOCH = time.time() * 1000
 BACKIMG = imgImport("background_img.png", WIDTH, HEIGHT)
 
 #(PARTO) my additions coming in, trying to mess with opacity
-WORLDWATER = imgImport("Test_Background4.png", int(WIDTH*0.8), int(HEIGHT*0.58)).convert_alpha()
-alpha = 100
-WORLDWATERPOLLUTION = imgImport("Test_Background5.png", int(WIDTH*0.8), int(HEIGHT*0.58)).convert_alpha()
-alpha_Water =100 # IF THIS VALUE GETS HIGHER THE WATER GETS MORE POLLUTED (VALUE GOES TO 255 MAX)
+WORLDWATER = imgImport("water_1.png", int(WIDTH*0.8), int(HEIGHT*0.58)).convert_alpha()
+alpha = 255
+WORLDWATERPOLLUTION = imgImport("water_p_1.png", int(WIDTH*0.8), int(HEIGHT*0.58)).convert_alpha()
+alpha_Water = 0 # IF THIS VALUE GETS HIGHER THE WATER GETS MORE POLLUTED (VALUE GOES TO 255 MAX)
 
 WORLD = imgImport("world.png", int(WIDTH*0.8), int(HEIGHT*0.58))
 TAB1 = imgImport("tab1.png", WIDTH, 0.35*HEIGHT)
@@ -262,7 +262,7 @@ def main():
         # game is over
 
         ##print(pol_amt)
-        
+        alpha_Water = pol_amt/POL_CAP * 255
         WORLDWATERPOLLUTION.set_alpha(alpha_Water) #opacityyy 
         WORLDWATER.set_alpha(alpha)
 
