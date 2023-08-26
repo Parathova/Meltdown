@@ -16,7 +16,7 @@ def imgImport(name, w, h, rot=0):
     return pyg.transform.rotate(pyg.transform.scale(pyg.image.load("dist/assets/img/" + name), (w, h)), rot)
 
 
-company_name = "Vought"
+company_name = ""
 popup = False
 tab = 0 #count for which tab we are currently on (0-3)
 ticks = 0
@@ -300,6 +300,96 @@ def gen_pop():
     draw_text(text, 0.34*WIDTH, 0.32*HEIGHT, (127, 224 , 164))
     draw_text(text2, 0.345*WIDTH, 0.35*HEIGHT, (127, 224 , 164))
 
+def menu():
+    Start = False
+    global company_name
+    play_x = 0.5
+    play_y = 0.5
+    anipos_x = 0
+    anipos_y = 0
+    up = True
+    msavex = 0
+    msavey = 0
+    while Start == False:
+        thisanimationwillworkisayso = False
+        mx, my = pyg.mouse.get_pos()
+        msavex = mx
+        msavey = my
+        menuBackground = imgImport("menu/menu_img.png", WIDTH, HEIGHT).convert()
+        play = imgImport("menu/playButton.png", play_x*WIDTH, play_y*HEIGHT)
+        play_rect = play.get_rect(topleft = (0.26*WIDTH, 0.695*HEIGHT))
+        WIN.blit(menuBackground,(0, 0))
+        for event in pyg.event.get():
+            if event.type == pyg.QUIT:
+                pyg.quit()
+                exit() 
+            keys_pressed = pyg.key.get_pressed()
+            
+            if event.type == pyg.MOUSEBUTTONDOWN:
+                if play_rect.collidepoint(msavex, msavey):
+                    Start = True
+
+            if keys_pressed[pyg.K_SPACE]:
+                print ('uh')
+                Start = True
+            """
+            if play_rect.collidepoint(msavex, msavey):
+                if up == True:
+                    play_x += 0.005
+                    play_y += 0.005
+                    anipos_x += 0.002*WIDTH
+                    anipos_y += 0.001*HEIGHT
+                    if play_x >= 0.55:
+                        up = False
+                    thisanimationwillworkisayso = True
+                if up == False:
+                    play_x -= 0.005
+                    play_y -= 0.005
+                    anipos_x -= 0.002*WIDTH
+                    anipos_y -= 0.001*HEIGHT
+                    if play_x <= 0.5:
+                        up = True
+                    thisanimationwillworkisayso = True
+            
+        #trying to get the animation working but idk anymore
+        if thisanimationwillworkisayso == False:
+                WIN.blit(play, (0.26*WIDTH, 0.695*HEIGHT))
+        elif play_rect.collidepoint(msavex, msavey):
+            WIN.blit(play, (0.26*WIDTH-anipos_x, 0.695*HEIGHT-anipos_y))"""
+        pyg.display.update()
+
+    #menu to select your name/ colony or whatever
+    Start = False
+    while Start == False:
+        mousepos = pyg.mouse.get_pos()
+        text_surface = display_font.render(company_name, None, (127, 224, 164))
+        name_popup = imgImport('menu/nameEnter.png', 0.8*WIDTH, 0.8*HEIGHT)
+        popupButton = imgImport('menu/menu_button.png', 0.2*WIDTH, 0.1*HEIGHT)
+        popupButton_rect = popupButton.get_rect(topleft = (0.6*WIDTH, 0.8*HEIGHT))
+        
+        for event in pyg.event.get():
+            if event.type == pyg.QUIT:
+                pyg.quit()
+                exit() 
+            keys_pressed = pyg.key.get_pressed()
+            if keys_pressed[pyg.K_RETURN]:
+                Start = True
+            if event.type == pyg.KEYDOWN:
+                company_name = company_name + pyg.key.name(event.key)
+            if keys_pressed[pyg.K_BACKSPACE]:
+                company_name = company_name.replace("backspace", "")
+                company_name = company_name[:-1]
+            company_name = company_name.replace("space", " ")
+            company_name = company_name.replace("return", "")
+            company_name = company_name.replace("caps lock", "")
+            if popupButton_rect.collidepoint(mousepos)and event.type == pyg.MOUSEBUTTONDOWN:
+                Start = True
+        WIN.blit(name_popup, (0.1*WIDTH, 0.14*HEIGHT))
+        #WIN.blit(popupButton, (0.48*WIDTH, 0.57*HEIGHT))
+        WIN.blit(popupButton, (0.6*WIDTH, 0.8*HEIGHT))
+        WIN.blit(text_surface, (0.1*WIDTH+90, 0.13*HEIGHT+180))
+        pyg.display.update()
+
 def draw():
     
     mx, my = pyg.mouse.get_pos()
@@ -494,6 +584,7 @@ def main():
     
     # game loop. this will be active to run the game
     pyg.init()
+    menu()
     while run:
         #clock.tick(FPS) #again, controls fps 
         #print(time_passed())
@@ -741,4 +832,5 @@ def main():
 
 # dont touch this; if u have question abt it dm jaden
 if __name__ == "__main__":
+    
     main()
