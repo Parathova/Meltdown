@@ -9,6 +9,7 @@ WIDTH = 1080
 HEIGHT = 720
 TICK_RATE = 500 #low is faster tjicks
 POL_CAP = 5000
+EPOCH = time.time() * 1000
 
 
 def imgImport(name, w, h, rot=0):
@@ -26,6 +27,39 @@ warn = {
     "req":1,
     "tab":-1
 }
+activ_int = 1000*120 #1 second x 120, every 2 minutes it'll run the chance of event
+
+
+pol_amt = 0.0 # tracks pollution amt
+money_amt = 10.0 # tracks money amt
+
+
+pol_rate = 0.50
+money_rate = 0.15
+pub_amt = pol_rate/5.0
+pub_rate = 1.0
+disc_rate = 1.0
+
+upgrade_track = [0, 0, 0, 0]
+base_costs = [
+    [40, 100, 540, 1200],
+    [10, 200, 1150, 1900],
+    [12, 24, 36, 50],
+    [50, 150, 220, 400]
+]
+upgrade_costs = [
+    [40, 100, 540, 1200],
+    [10, 200, 1150, 1900],
+    [12, 24, 36, 50],
+    [50, 150, 220, 400]
+]
+popup_info = {
+    "type": -1, # 0, 1 or 2
+    "name": "group name",
+    "amt": -1 #amt deduction for wtv
+}
+
+
 WIN = pyg.display.set_mode((WIDTH, HEIGHT))
 pyg.display.set_caption("Meltdown")
 pyg.display.set_icon(pyg.image.load("dist/assets/img/icon.png"))
@@ -49,36 +83,28 @@ pro_2_rect = pyg.Rect(WIDTH*0.20, HEIGHT*0.78, WIDTH*0.1, WIDTH*0.1)
 pro_3_rect = pyg.Rect(WIDTH*0.35, HEIGHT*0.78, WIDTH*0.1, WIDTH*0.1)
 pro_4_rect = pyg.Rect(WIDTH*0.50, HEIGHT*0.78, WIDTH*0.1, WIDTH*0.1)
 
+#propoganda buttons
+pr_pro_1_rect = pyg.Rect(WIDTH*0.05, HEIGHT*0.75, WIDTH*0.1, WIDTH*0.05)
+pr_pro_2_rect = pyg.Rect(WIDTH*0.20, HEIGHT*0.75, WIDTH*0.1, WIDTH*0.05)
+pr_pro_3_rect = pyg.Rect(WIDTH*0.35, HEIGHT*0.75, WIDTH*0.1, WIDTH*0.05)
+pr_pro_4_rect = pyg.Rect(WIDTH*0.50, HEIGHT*0.75, WIDTH*0.1, WIDTH*0.05)
+
+#lobbying buttons
+pr_lob_1_rect = pyg.Rect(WIDTH*0.05, HEIGHT*0.85, WIDTH*0.1, WIDTH*0.05)
+pr_lob_2_rect = pyg.Rect(WIDTH*0.20, HEIGHT*0.85, WIDTH*0.1, WIDTH*0.05)
+pr_lob_3_rect = pyg.Rect(WIDTH*0.35, HEIGHT*0.85, WIDTH*0.1, WIDTH*0.05)
+pr_lob_4_rect = pyg.Rect(WIDTH*0.50, HEIGHT*0.85, WIDTH*0.1, WIDTH*0.05)
+
 
 activ_bttn = imgImport("buttons/activ_bttn.png", WIDTH*0.1, HEIGHT*0.05)
 
 
-activ_rect = activ_bttn.get_rect(topleft=(0.615*WIDTH, 0.54*HEIGHT))
+activ_rect = activ_bttn.get_rect(topleft=(0.71*WIDTH, 0.38*HEIGHT))
 
 #the bar covering the pollution img (to hide progress ig)
 #pol_bar_rect = pyg.Rect(WIDTH*0.025, HEIGHT*0.1223, WIDTH*0.045, HEIGHT*0.415)
 
-pol_amt = 0.0 # tracks pollution amt
-money_amt = 10.0 # tracks money amt
 
-pol_rate = 100.5
-money_rate = 0.15
-pub_amt = pol_rate/5.0
-
-upgrade_track = [0, 0, 0]
-upgrade_costs = [
-    [40, 100, 540, 1200],
-    [10, 200, 1150, 1900]
-]
-popup_info = {
-    "type": -1, # 0, 1 or 2
-    "name": "group name",
-    "amt": -1 #amt deduction for wtv
-}
-
-
-
-EPOCH = time.time() * 1000
 BACKIMG = imgImport("background_img.png", WIDTH, HEIGHT)
 
 #(PARTO) my additions coming in, trying to mess with opacity
@@ -94,12 +120,14 @@ TAB3 = imgImport("tab3.png", WIDTH, 0.35*HEIGHT)
 TAB4 = imgImport("tab4.png", WIDTH, 0.35*HEIGHT)
 POL_BAR = imgImport("pol_bar.png", WIDTH*0.05, HEIGHT*0.5)
 NEWS_BOX = imgImport("news.png", WIDTH*.16, HEIGHT*.28)
-ACTIVE_INT = imgImport("activist.png", WIDTH*0.4, HEIGHT*0.4) #activists pop-up
+ACTIVE_INT = imgImport("Act_popup.png", WIDTH*0.5, HEIGHT*0.25) #activists pop-up
 
 
 
 lock = imgImport("buttons/lock.png", WIDTH*0.1, WIDTH*0.1)
 buy = imgImport("buttons/buy.png", WIDTH*0.1, WIDTH*0.1)
+lock_half = imgImport("buttons/lock_half.png", WIDTH*0.1, WIDTH*0.05)
+buy_half = imgImport("buttons/buy_half.png", WIDTH*0.1, WIDTH*0.05)
 
 exp_prov = imgImport("buttons/exp/exp_prov.png", WIDTH*0.1, WIDTH*0.1)
 exp_nat = imgImport("buttons/exp/exp_nat.png", WIDTH*0.1, WIDTH*0.1)
@@ -110,6 +138,16 @@ pro_1 = imgImport("buttons/pro/pro_1.png", WIDTH*0.1, WIDTH*0.1)
 pro_2 = imgImport("buttons/pro/pro_2.png", WIDTH*0.1, WIDTH*0.1)
 pro_3 = imgImport("buttons/pro/pro_3.png", WIDTH*0.1, WIDTH*0.1)
 pro_4 = imgImport("buttons/pro/pro_4.png", WIDTH*0.1, WIDTH*0.1)
+
+pr_pro_1 = imgImport("buttons/pr/pr_pro_1.png", WIDTH*0.1, WIDTH*0.05)
+pr_pro_2 = imgImport("buttons/pr/pr_pro_2.png", WIDTH*0.1, WIDTH*0.05)
+pr_pro_3 = imgImport("buttons/pr/pr_pro_3.png", WIDTH*0.1, WIDTH*0.05)
+pr_pro_4 = imgImport("buttons/pr/pr_pro_4.png", WIDTH*0.1, WIDTH*0.05)
+
+pr_lob_1 = imgImport("buttons/pr/pr_lob_1.png", WIDTH*0.1, WIDTH*0.05)
+pr_lob_2 = imgImport("buttons/pr/pr_lob_2.png", WIDTH*0.1, WIDTH*0.05)
+pr_lob_3 = imgImport("buttons/pr/pr_lob_3.png", WIDTH*0.1, WIDTH*0.05)
+pr_lob_4 = imgImport("buttons/pr/pr_lob_4.png", WIDTH*0.1, WIDTH*0.05)
 
 #expansion descriptions
 exp_prov_des = imgImport("buttons/exp/exp_prov_des.png", WIDTH*0.12, WIDTH*0.12)
@@ -123,18 +161,36 @@ pro_2_des = imgImport("buttons/pro/pro_2_des.png", WIDTH*0.12, WIDTH*0.12)
 pro_3_des = imgImport("buttons/pro/pro_3_des.png", WIDTH*0.12, WIDTH*0.12)
 pro_4_des = imgImport("buttons/pro/pro_4_des.png", WIDTH*0.12, WIDTH*0.12)
 
+#pr propoganda des
+pr_pro_1_des = imgImport("buttons/pr/pr_pro_1_des.png", WIDTH*0.12, WIDTH*0.12)
+pr_pro_2_des = imgImport("buttons/pr/pr_pro_2_des.png", WIDTH*0.12, WIDTH*0.12)
+pr_pro_3_des = imgImport("buttons/pr/pr_pro_3_des.png", WIDTH*0.12, WIDTH*0.12)
+pr_pro_4_des = imgImport("buttons/pr/pr_pro_4_des.png", WIDTH*0.12, WIDTH*0.12)
+
+#pr lobbying des
+pr_lob_1_des = imgImport("buttons/pr/pr_lob_1_des.png", WIDTH*0.12, WIDTH*0.12)
+pr_lob_2_des = imgImport("buttons/pr/pr_lob_2_des.png", WIDTH*0.12, WIDTH*0.12)
+pr_lob_3_des = imgImport("buttons/pr/pr_lob_3_des.png", WIDTH*0.12, WIDTH*0.12)
+pr_lob_4_des = imgImport("buttons/pr/pr_lob_4_des.png", WIDTH*0.12, WIDTH*0.12)
 
 pyg.font.init()
-doc_font = pyg.font.Font("dist/assets/fonts/ShareTech.ttf", 16)
+doc_font = pyg.font.Font("dist/assets/fonts/ShareTech.ttf", 15)
+display_font = pyg.font.Font("dist/assets/fonts/ShareTech.ttf", 36)
 
-
+def update_costs():
+    global upgrade_costs
+    for i in range(len(upgrade_costs)-1):
+        for j in range(len(upgrade_costs[i])):
+            upgrade_costs[i][j] = round(base_costs[i][j] * disc_rate, 2)
 
 def time_passed():
     return int(time.time() * 1000 - EPOCH)
 
-def draw_text(text, x, y, color):
+def draw_text(text, x, y, color, display=False):
     ##print(str(x) +  " " + str(y))
-    img = doc_font.render(text, True, color)
+    img = ""
+    if(display): img = display_font.render(text, True, color)
+    else: img = doc_font.render(text, True, color)
     WIN.blit(img, (x, y))
 
 def not_enough(required, current):
@@ -143,7 +199,7 @@ def not_enough(required, current):
     print('not enough')
 
 
-activ_int = 1000*2 #1 second x 120, every 2 minutes it'll run the chance of event
+
  
 activ_count = 1
 
@@ -161,12 +217,18 @@ def activ_prob():
    global popup
    prob = random.randint(1,100) #the numbers represent the % chance of event happening 
    print(prob, pub_amt)
-   if prob <= pub_amt*80 + 20:
+   if prob <= (pub_amt*95 + 5)*pub_rate:
        init_act()
        popup=True
    
         
+def pol_tick():
+    global pol_amt
+    pol_amt += pol_rate
 
+def money_tick():
+    global money_amt
+    money_amt += money_rate
      
 
 def init_act():
@@ -207,7 +269,7 @@ def init_act():
         pol_loss = (pol_prob/100)*(pol_amt) #why isn't this registering 
         print("pol loss", pol_loss, pol_amt)
         pol_amt -= pol_loss
-        nerds = ['Child Prodigie invents new', 'Scientists improve', 'That one kid everyone knew was going to Harvard creates', 'Your archnemis spitefully makes a']
+        nerds = ['Child Prodigie invents new', 'Scientists improve', 'That one Harvard kid', 'Your archnemis spitefully makes a']
         list3_num = random.randint(0,2)
         #text = ' Breaking News: ' + nerds[list3_num] + ' new carbon dioxide reversal tool that can aid in combating air pollution!\n (Pollution down by:' + str(round(pol_loss, 2)) + "ppm)"
 
@@ -223,15 +285,20 @@ def init_act():
 
 def gen_pop():
     text = ""
+    text2 = ""
     if popup_info["type"] == 0:
-        text = ('ACTIVIST INTERFERENCE: ' + popup_info["name"] + 
-        '  organization holds protests lasting 3 days, \n widespread public awareness campaign (Public Satisfaction down by: ' + str(popup_info["amt"]) + ")")
+        text = 'ACTIVIST INTERFERENCE: ' + popup_info["name"] + '  organization holds protests lasting'
+        text2 = '3 days,  widespread public awareness campaign (Public Satisfaction down by: ' + str(popup_info["amt"]) + ")"
+
     elif popup_info["type"] == 1:
         text = 'ACTIVIST INTERFERENCE: ' + popup_info["name"] + ' sues ' + company_name + ' for $' + str(popup_info["amt"]) + "K."
     elif popup_info["type"] == 2:
-        text = ' Breaking News: ' + popup_info["name"] + ' new carbon dioxide reversal tool that can aid in combating air pollution!\n (Pollution down by:' + str(popup_info["amt"]) + "ppm)"
+        text = ' Breaking News: ' + popup_info["name"] + ' new carbon dioxide reversal tool '
+        text2 = 'that can aid in combating air pollution! (Pollution down by:' + str(popup_info["amt"]) + "ppm)"
 
-    draw_text(text, 0.4*WIDTH, 0.32*HEIGHT, (55, 45 , 51))
+
+    draw_text(text, 0.34*WIDTH, 0.32*HEIGHT, (127, 224 , 164))
+    draw_text(text2, 0.345*WIDTH, 0.35*HEIGHT, (127, 224 , 164))
 
 def draw():
     
@@ -249,7 +316,7 @@ def draw():
     if popup == True: 
         WIN.blit(ACTIVE_INT, (0.32*WIDTH, 0.2*HEIGHT))
 
-        WIN.blit(activ_bttn, (0.615*WIDTH, 0.54*HEIGHT))
+        WIN.blit(activ_bttn, (0.71*WIDTH, 0.38*HEIGHT))
         gen_pop() #ELIMATE AFTER TESTING
 
     
@@ -312,7 +379,7 @@ def draw():
                 WIN.blit(buy, (WIDTH*0.20, HEIGHT*0.78))
             if(upgrade_track[1] > 2):
                 WIN.blit(buy, (WIDTH*0.35, HEIGHT*0.78))
-            if(upgrade_track[0] > 3):
+            if(upgrade_track[1] > 3):
                 WIN.blit(buy, (WIDTH*0.50, HEIGHT*0.78))
             
             # descriptions
@@ -329,9 +396,75 @@ def draw():
         
         case 2:
             WIN.blit(TAB3, (0, HEIGHT*0.65))
-        
+
+            WIN.blit(pr_pro_1, (WIDTH*0.05, HEIGHT*0.75))
+            WIN.blit(pr_pro_2, (WIDTH*0.20, HEIGHT*0.75))
+            WIN.blit(pr_pro_3, (WIDTH*0.35, HEIGHT*0.75))
+            WIN.blit(pr_pro_4, (WIDTH*0.50, HEIGHT*0.75))
+            
+            if(upgrade_track[2] < 1):
+                WIN.blit(lock_half, (WIDTH*0.20, HEIGHT*0.75))
+            if(upgrade_track[2] < 2):
+                WIN.blit(lock_half, (WIDTH*0.35, HEIGHT*0.75))
+            if(upgrade_track[2] < 3):
+                WIN.blit(lock_half, (WIDTH*0.50, HEIGHT*0.75))
+            
+            if(upgrade_track[2] > 0):
+                WIN.blit(buy_half, (WIDTH*0.05, HEIGHT*0.75))
+            if(upgrade_track[2] > 1):
+                WIN.blit(buy_half, (WIDTH*0.20, HEIGHT*0.75))
+            if(upgrade_track[2] > 2):
+                WIN.blit(buy_half, (WIDTH*0.35, HEIGHT*0.75))
+            if(upgrade_track[2] > 3):
+                WIN.blit(buy_half, (WIDTH*0.50, HEIGHT*0.75))
+            
+            if (pr_pro_1_rect.collidepoint(mx, my)):
+                WIN.blit(pr_pro_1_des, (WIDTH*0.04, HEIGHT*0.57))
+            elif pr_pro_2_rect.collidepoint(mx, my) and upgrade_track[2] > 0:
+                WIN.blit(pr_pro_2_des, (WIDTH*0.19, HEIGHT*0.57))
+            elif pr_pro_3_rect.collidepoint(mx, my) and upgrade_track[2] > 1:
+                WIN.blit(pr_pro_3_des, (WIDTH*0.34, HEIGHT*0.57))
+            elif pr_pro_4_rect.collidepoint(mx, my) and upgrade_track[2] > 2:
+                WIN.blit(pr_pro_4_des, (WIDTH*0.49, HEIGHT*0.57))
+            
+
+            #lobbying
+            WIN.blit(pr_lob_1, (WIDTH*0.05, HEIGHT*0.85))
+            WIN.blit(pr_lob_2, (WIDTH*0.20, HEIGHT*0.85))
+            WIN.blit(pr_lob_3, (WIDTH*0.35, HEIGHT*0.85))
+            WIN.blit(pr_lob_4, (WIDTH*0.50, HEIGHT*0.85))
+            
+            if(upgrade_track[3] < 1):
+                WIN.blit(lock_half, (WIDTH*0.20, HEIGHT*0.85))
+            if(upgrade_track[3] < 2):
+                WIN.blit(lock_half, (WIDTH*0.35, HEIGHT*0.85))
+            if(upgrade_track[3] < 3):
+                WIN.blit(lock_half, (WIDTH*0.50, HEIGHT*0.85))
+            
+            if(upgrade_track[3] > 0):
+                WIN.blit(buy_half, (WIDTH*0.05, HEIGHT*0.85))
+            if(upgrade_track[3] > 1):
+                WIN.blit(buy_half, (WIDTH*0.20, HEIGHT*0.85))
+            if(upgrade_track[3] > 2):
+                WIN.blit(buy_half, (WIDTH*0.35, HEIGHT*0.85))
+            if(upgrade_track[3] > 3):
+                WIN.blit(buy_half, (WIDTH*0.50, HEIGHT*0.85))
+
+            if (pr_lob_1_rect.collidepoint(mx, my)):
+                WIN.blit(pr_lob_1_des, (WIDTH*0.04, HEIGHT*0.67))
+            elif pr_lob_2_rect.collidepoint(mx, my) and upgrade_track[3] > 0:
+                WIN.blit(pr_lob_2_des, (WIDTH*0.19, HEIGHT*0.67))
+            elif pr_lob_3_rect.collidepoint(mx, my) and upgrade_track[3] > 1:
+                WIN.blit(pr_lob_3_des, (WIDTH*0.34, HEIGHT*0.67))
+            elif pr_lob_4_rect.collidepoint(mx, my) and upgrade_track[3] > 2:
+                WIN.blit(pr_lob_4_des, (WIDTH*0.49, HEIGHT*0.67))
+            
         case 3:
             WIN.blit(TAB4, (0, HEIGHT*0.65))
+
+            draw_text(("Public Satisfaction: " + f"{round(100-(pub_amt*100), 2):,}" + "% " ), WIDTH*0.1, HEIGHT*0.75, (55, 45, 51), display=True)
+            draw_text(("Pollution Rate: " + f"{round(pol_rate*120, 2):,}" + "ppm/minute " ), WIDTH*0.1, HEIGHT*0.82, (55, 45, 51), display=True)
+            draw_text(("Income: $" + f"{round(money_rate*120, 2):,}" + "K/minute " ), WIDTH*0.1, HEIGHT*0.89, (55, 45, 51), display=True)
 
     # pollution bar
     WIN.blit(POL_BAR, (WIDTH*0.03, HEIGHT*0.08))            
@@ -348,16 +481,10 @@ def draw():
 
     #pyg.display.update()
 
-def pol_tick():
-    global pol_amt
-    pol_amt += pol_rate
 
-def money_tick():
-    global money_amt
-    money_amt += money_rate
 
 def main():
-    global tab, ticks, pol_rate, money_rate, pol_amt, money_amt, upgrade_track, alpha_Water, popup, pub_amt
+    global tab, ticks, pol_rate, money_rate, pol_amt, money_amt, upgrade_track, alpha_Water, popup, pub_amt, disc_rate, pub_rate
     #clock = pyg.time.Clock() #controlls fps and whatnot
     pyg.mouse.set_cursor(pyg.cursors.diamond)
     
@@ -370,7 +497,7 @@ def main():
     while run:
         #clock.tick(FPS) #again, controls fps 
         #print(time_passed())
-        pub_amt = 1#pol_rate/5.0
+        pub_amt = (pol_rate-0.5)/5.0
         
         
 
@@ -501,8 +628,86 @@ def main():
                             pol_rate += 1.2
                             upgrade_track[1] += 1
 
+                    elif tab == 2:
+                        if upgrade_track[2] == 4:
+                            print("no dice")
+
+                        elif pr_pro_1_rect.collidepoint(mx, my) and upgrade_track[2] == 0:
+                            if(money_amt < upgrade_costs[2][0]):
+                                not_enough(upgrade_costs[2][0], money_amt)
+                                enough = True
+                                continue
+                            money_amt -= upgrade_costs[2][0]
+                            pub_rate = 0.9
+                            upgrade_track[2] += 1
+
+                        elif pr_pro_2_rect.collidepoint(mx, my) and upgrade_track[2] == 1:
+                            if(money_amt < upgrade_costs[2][1]):
+                                not_enough(upgrade_costs[2][1], money_amt)
+                                enough = True
+                                continue
+                            money_amt -= upgrade_costs[2][1]
+                            pub_rate = 0.8
+                            upgrade_track[2] += 1
+
+                        elif pr_pro_3_rect.collidepoint(mx, my) and upgrade_track[2] == 2:
+                            if(money_amt < upgrade_costs[2][2]):
+                                not_enough(upgrade_costs[2][2], money_amt)
+                                enough = True
+                                continue
+                            money_amt -= upgrade_costs[2][2]
+                            pub_rate = 0.7
+                            upgrade_track[2] += 1
+
+                        elif pr_pro_4_rect.collidepoint(mx, my) and upgrade_track[2] == 3:
+                            if(money_amt < upgrade_costs[2][3]):
+                                not_enough(upgrade_costs[2][3], money_amt)
+                                enough = True
+                                continue
+                            money_amt -= upgrade_costs[2][3]
+                            pub_rate = 0.6
+                            upgrade_track[2] += 1
+                        
+                        
+                        #lobbying
+                        elif pr_lob_1_rect.collidepoint(mx, my) and upgrade_track[3] == 0:
+                            if(money_amt < upgrade_costs[3][0]):
+                                not_enough(upgrade_costs[3][0], money_amt)
+                                enough = True
+                                continue
+                            money_amt -= upgrade_costs[3][0]
+                            disc_rate = 0.95
+                            upgrade_track[3] += 1
+
+                        elif pr_lob_2_rect.collidepoint(mx, my) and upgrade_track[3] == 1:
+                            if(money_amt < upgrade_costs[3][1]):
+                                not_enough(upgrade_costs[3][1], money_amt)
+                                enough = True
+                                continue
+                            money_amt -= upgrade_costs[3][1]
+                            disc_rate = 0.88
+                            upgrade_track[3] += 1
+
+                        elif pr_lob_3_rect.collidepoint(mx, my) and upgrade_track[3] == 2:
+                            if(money_amt < upgrade_costs[3][2]):
+                                not_enough(upgrade_costs[3][2], money_amt)
+                                enough = True
+                                continue
+                            money_amt -= upgrade_costs[3][2]
+                            disc_rate = 0.78
+                            upgrade_track[3] += 1
+
+                        elif pr_lob_4_rect.collidepoint(mx, my) and upgrade_track[3] == 3:
+                            if(money_amt < upgrade_costs[3][3]):
+                                not_enough(upgrade_costs[3][3], money_amt)
+                                enough = True
+                                continue
+                            money_amt -= upgrade_costs[3][3]
+                            disc_rate = 0.65
+                            upgrade_track[3] += 1
 
 
+        
         keys_pressed = pyg.key.get_pressed()
         
 
@@ -515,6 +720,7 @@ def main():
         WORLDWATER.set_alpha(alpha)
 
         draw()
+        update_costs()
         if(enough):
             warn["tab"] = tab
             warn["time"] = time_passed()
