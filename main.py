@@ -311,7 +311,7 @@ def draw():
     WIN.blit(WORLD, (WIDTH*0.18, HEIGHT*0.05))
     WIN.blit(WORLDWATER, (WIDTH*0.18, HEIGHT*0.05)) #draw the water background 
     WIN.blit(WORLDWATERPOLLUTION, (WIDTH*0.18, HEIGHT*0.05)) #draw the water background green
-    WIN.blit(NEWS_BOX, (0.12*WIDTH, 0.3*HEIGHT))
+    #WIN.blit(NEWS_BOX, (0.12*WIDTH, 0.3*HEIGHT))
     
     if popup == True: 
         WIN.blit(ACTIVE_INT, (0.32*WIDTH, 0.2*HEIGHT))
