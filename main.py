@@ -35,7 +35,7 @@ money_amt = 10.0 # tracks money amt
 
 
 pol_rate = .50
-money_rate = 0.15
+money_rate = .15
 pub_amt = pol_rate/5.0
 pub_rate = 1.0
 disc_rate = 1.0
@@ -114,7 +114,10 @@ WORLDWATERPOLLUTION = imgImport("water_p_1.png", int(WIDTH*0.8), int(HEIGHT*0.58
 alpha_Water = 0 # IF THIS VALUE GETS HIGHER THE WATER GETS MORE POLLUTED (VALUE GOES TO 255 MAX)
 
 WORLD = imgImport("world.png", int(WIDTH*0.8), int(HEIGHT*0.58))
-ol1 = imgImport("overlayed/")
+ol1 = imgImport("overlays/prov_map.png", int(WIDTH*0.8), int(HEIGHT*0.58))
+ol2 = imgImport("overlays/nat_map.png", int(WIDTH*0.8), int(HEIGHT*0.58))
+ol3 = imgImport("overlays/cont_map.png", int(WIDTH*0.8), int(HEIGHT*0.58))
+ol4 = imgImport("overlays/world_map.png", int(WIDTH*0.8), int(HEIGHT*0.58))
 
 TAB1 = imgImport("tab1.png", WIDTH, 0.35*HEIGHT)
 TAB2 = imgImport("tab2.png", WIDTH, 0.35*HEIGHT)
@@ -415,6 +418,14 @@ def draw():
     #WIN.fill((0, 0, 0))
     WIN.blit(BACKIMG, (0, 0)) #putting images at coordinates (origin top left)
     WIN.blit(WORLD, (WIDTH*0.18, HEIGHT*0.05))
+    if upgrade_track[0] == 1:
+        WIN.blit(ol1, (WIDTH*0.18, HEIGHT*0.05))
+    elif upgrade_track[0] == 2:
+        WIN.blit(ol2, (WIDTH*0.18, HEIGHT*0.05))
+    elif upgrade_track[0] == 3:
+        WIN.blit(ol3, (WIDTH*0.18, HEIGHT*0.05))
+    elif upgrade_track[0] == 4:
+        WIN.blit(ol4, (WIDTH*0.18, HEIGHT*0.05))
     WIN.blit(WORLDWATER, (WIDTH*0.18, HEIGHT*0.05)) #draw the water background 
     WIN.blit(WORLDWATERPOLLUTION, (WIDTH*0.18, HEIGHT*0.05)) #draw the water background green
     #WIN.blit(NEWS_BOX, (0.12*WIDTH, 0.3*HEIGHT))
