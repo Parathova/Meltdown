@@ -63,7 +63,7 @@ def loading():
 
 defont = pyg.font.Font('dist/assets/fonts/ShareTech.ttf', 100)
 play_x = 0.5
-play_y = 0.5
+play_y = 0.17
 anipos_x = 0
 anipos_y = 0
 up = True
