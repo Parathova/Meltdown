@@ -49,11 +49,19 @@ Start = False
     
 #everything after this i think is loading the game
 def imgImport(name, w, h, rot=0):
-    return pyg.transform.rotate(pyg.transform.scale(pyg.image.load("assets/img/" + name), (w, h)), rot)
+    return pyg.transform.rotate(pyg.transform.scale(pyg.image.load("dist/assets/img/" + name), (w, h)), rot)
+
 
 
 #menu thingy hopefully it works
 #some variables im using for animations or somethin
+pyg.init()
+def loading():
+    loadingimg = imgImport('icon.png', 0.6*WIDTH, HEIGHT) 
+    WIN.blit(loadingimg,(0,0))
+    pyg.display.update()
+    
+defont = pyg.font.Font('dist/assets/fonts/ShareTech.ttf', 100)
 play_x = 0.5
 play_y = 0.5
 anipos_x = 0
@@ -61,7 +69,6 @@ anipos_y = 0
 up = True
 msavex = 0
 msavey = 0
-pyg.init()
 while Start == False:
     thisanimationwillworkisayso = False
     mx, my = pyg.mouse.get_pos()
@@ -107,15 +114,20 @@ while Start == False:
     pyg.display.update()
 
 #menu to select your name/ colony or whatever
-defont = pyg.font.Font(None, 40)
 player_name = ""
 Start = False
 while Start == False:
+    mousepos = pyg.mouse.get_pos()
+    text_surface = defont.render(player_name, None, (130, 255, 255))
+    name_popup = imgImport('menu/nameEnter.png', 0.8*WIDTH, 0.8*HEIGHT)
+    popupButton = imgImport('buttons/activ_bttn.png', 0.4*WIDTH, 0.3*HEIGHT)
+    popupButton_rect = popupButton.get_rect(topleft = (0.5*WIDTH, 0.5*HEIGHT))
     for event in pyg.event.get():
         #get input for name 
         keys_pressed = pyg.key.get_pressed()
         if keys_pressed[pyg.K_RETURN]:
             Start = True
+            loading
         if event.type == pyg.KEYDOWN:
             player_name = player_name + pyg.key.name(event.key)
         if keys_pressed[pyg.K_BACKSPACE]:
@@ -123,14 +135,15 @@ while Start == False:
             player_name = player_name[:-1]
         player_name = player_name.replace("space", " ")
         player_name = player_name.replace("return", "")
-    print (player_name)
-    text_surface = defont.render(player_name, None, (0, 255, 255))
-    name_popup = imgImport('news.png', 0.5*WIDTH, 0.6*HEIGHT)
-    WIN.blit(name_popup, (0.37*HEIGHT, 0.2*WIDTH))
-    WIN.blit(text_surface, (0.37*HEIGHT+20, 0.2*WIDTH+100))
+        if popupButton_rect.collidepoint(mousepos)and event.type == pyg.MOUSEBUTTONDOWN:
+            Start = True
+            loading
+    WIN.blit(name_popup, (0.1*WIDTH, 0.14*HEIGHT))
+    WIN.blit(popupButton, (0.48*WIDTH, 0.57*HEIGHT))
+    WIN.blit(text_surface, (0.1*WIDTH+90, 0.13*HEIGHT+180))
     pyg.display.update()
-    
-            
+
+loading()
 #stop main menu music:
 EPOCH = time.time() * 1000
 BACKIMG = imgImport("background_img.png", WIDTH, HEIGHT)
@@ -165,7 +178,7 @@ exp_glo_des = imgImport("buttons/exp/exp_glo_des.png", WIDTH*0.1, WIDTH*0.1)
 
 
 pyg.font.init()
-doc_font = pyg.font.Font("assets/fonts/ShareTech.ttf", 16)
+doc_font = pyg.font.Font("dist/assets/fonts/ShareTech.ttf", 16)
 
 
 
