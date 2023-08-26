@@ -21,7 +21,7 @@ warn = {
 }
 WIN = pyg.display.set_mode((WIDTH, HEIGHT))
 pyg.display.set_caption("Meltdown")
-pyg.display.set_icon(pyg.image.load("build/exe.win-amd64-3.10/assets/img/icon.png"))
+pyg.display.set_icon(pyg.image.load("assets/img/icon.png"))
 
 
 # Tab buttons (x, y, width, height)
@@ -61,7 +61,7 @@ upgrade_costs = [
 news_queue = []
 
 def imgImport(name, w, h, rot=0):
-    return pyg.transform.rotate(pyg.transform.scale(pyg.image.load("build/exe.win-amd64-3.10/assets/img/" + name), (w, h)), rot)
+    return pyg.transform.rotate(pyg.transform.scale(pyg.image.load("assets/img/" + name), (w, h)), rot)
 
 EPOCH = time.time() * 1000
 BACKIMG = imgImport("background_img.png", WIDTH, HEIGHT)
@@ -116,7 +116,7 @@ popup = False
 activ_rect = activ_bttn.get_rect(topleft=(0.615*WIDTH, 0.54*HEIGHT))
 
 pyg.font.init()
-doc_font = pyg.font.Font("build/exe.win-amd64-3.10/assets/fonts/ShareTech.ttf", 16)
+doc_font = pyg.font.Font("assets/fonts/ShareTech.ttf", 16)
 
 
 
