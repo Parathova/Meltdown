@@ -57,10 +57,10 @@ def imgImport(name, w, h, rot=0):
 #some variables im using for animations or somethin
 pyg.init()
 def loading():
-    loadingimg = imgImport('icon.png', 0.6*WIDTH, HEIGHT) 
+    loadingimg = imgImport('loading_screen.png', WIDTH, HEIGHT) 
     WIN.blit(loadingimg,(0,0))
     pyg.display.update()
-    
+
 defont = pyg.font.Font('dist/assets/fonts/ShareTech.ttf', 100)
 play_x = 0.5
 play_y = 0.5
@@ -135,6 +135,7 @@ while Start == False:
             player_name = player_name[:-1]
         player_name = player_name.replace("space", " ")
         player_name = player_name.replace("return", "")
+        player_name = player_name.replace("caps lock", "")
         if popupButton_rect.collidepoint(mousepos)and event.type == pyg.MOUSEBUTTONDOWN:
             Start = True
             loading
