@@ -28,13 +28,13 @@ warn = {
     "tab":-1
 }
 activ_int = 1000*120 #1 second x 120, every 2 minutes it'll run the chance of event
-
+game_state = 0
 
 pol_amt = 0.0 # tracks pollution amt
 money_amt = 10.0 # tracks money amt
 
 
-pol_rate = 0.50
+pol_rate = .50
 money_rate = 0.15
 pub_amt = pol_rate/5.0
 pub_rate = 1.0
@@ -114,6 +114,8 @@ WORLDWATERPOLLUTION = imgImport("water_p_1.png", int(WIDTH*0.8), int(HEIGHT*0.58
 alpha_Water = 0 # IF THIS VALUE GETS HIGHER THE WATER GETS MORE POLLUTED (VALUE GOES TO 255 MAX)
 
 WORLD = imgImport("world.png", int(WIDTH*0.8), int(HEIGHT*0.58))
+ol1 = imgImport("overlayed/")
+
 TAB1 = imgImport("tab1.png", WIDTH, 0.35*HEIGHT)
 TAB2 = imgImport("tab2.png", WIDTH, 0.35*HEIGHT)
 TAB3 = imgImport("tab3.png", WIDTH, 0.35*HEIGHT)
@@ -172,6 +174,10 @@ pr_lob_1_des = imgImport("buttons/pr/pr_lob_1_des.png", WIDTH*0.12, WIDTH*0.12)
 pr_lob_2_des = imgImport("buttons/pr/pr_lob_2_des.png", WIDTH*0.12, WIDTH*0.12)
 pr_lob_3_des = imgImport("buttons/pr/pr_lob_3_des.png", WIDTH*0.12, WIDTH*0.12)
 pr_lob_4_des = imgImport("buttons/pr/pr_lob_4_des.png", WIDTH*0.12, WIDTH*0.12)
+
+vic_img = imgImport("victory.png", 0.683*WIDTH, 0.418*HEIGHT)
+def_img = imgImport("defeat.png", 0.683*WIDTH, 0.418*HEIGHT)
+
 
 pyg.font.init()
 doc_font = pyg.font.Font("dist/assets/fonts/ShareTech.ttf", 15)
@@ -390,6 +396,16 @@ def menu():
         WIN.blit(text_surface, (0.1*WIDTH+90, 0.13*HEIGHT+180))
         pyg.display.update()
 
+def victory():
+    WIN.blit(BACKIMG, (0, 0)) #putting images at coordinates (origin top left)
+    WIN.blit(vic_img, (0.158*WIDTH, 0.224*HEIGHT))
+    pyg.display.update()
+
+def defeat():
+    WIN.blit(BACKIMG, (0, 0)) #putting images at coordinates (origin top left)
+    WIN.blit(def_img, (0.158*WIDTH, 0.224*HEIGHT))
+    pyg.display.update()
+
 def draw():
     
     mx, my = pyg.mouse.get_pos()
@@ -574,22 +590,37 @@ def draw():
 
 
 def main():
-    global tab, ticks, pol_rate, money_rate, pol_amt, money_amt, upgrade_track, alpha_Water, popup, pub_amt, disc_rate, pub_rate
+    global tab, ticks, pol_rate, money_rate, pol_amt, money_amt, upgrade_track, alpha_Water, popup, pub_amt, disc_rate, pub_rate, EPOCH
     #clock = pyg.time.Clock() #controlls fps and whatnot
     pyg.mouse.set_cursor(pyg.cursors.diamond)
     
     print(pub_amt)
-
+    
     run = True
     
     # game loop. this will be active to run the game
     pyg.init()
     menu()
+    EPOCH = time.time() * 1000
     while run:
         #clock.tick(FPS) #again, controls fps 
         #print(time_passed())
         pub_amt = (pol_rate-0.5)/5.0
-        
+        print(pol_amt, POL_CAP)
+        if pol_amt >= POL_CAP:
+            game_state = 1
+            victory()
+            for event in pyg.event.get():
+                if event.type == pyg.QUIT: run = False
+            
+            continue
+        if money_amt < 0:
+            game_state = 2
+            defeat()
+            for event in pyg.event.get():
+                if event.type == pyg.QUIT: run = False
+            
+            continue
         
 
         if(int(time_passed()/TICK_RATE) > ticks):
