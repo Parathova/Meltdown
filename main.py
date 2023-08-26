@@ -83,7 +83,7 @@ NEWS_BOX = imgImport("news.png", WIDTH*.16, HEIGHT*.28)
 lock = imgImport("buttons/lock.png", WIDTH*0.1, WIDTH*0.1)
 buy = imgImport("buttons/buy.png", WIDTH*0.1, WIDTH*0.1)
 
-exp_prov = imgImport("img/buttons/exp/exp_prov.png", WIDTH*0.1, WIDTH*0.1)
+exp_prov = imgImport("img/buttons/exp/exp_prov.png.png", WIDTH*0.1, WIDTH*0.1)
 exp_nat = imgImport("buttons/exp/exp_nat.png", WIDTH*0.1, WIDTH*0.1)
 exp_con = imgImport("buttons/exp/exp_con.png", WIDTH*0.1, WIDTH*0.1)
 exp_glo = imgImport("buttons/exp/exp_glo.png", WIDTH*0.1, WIDTH*0.1)
