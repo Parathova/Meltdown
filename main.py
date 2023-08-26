@@ -7,7 +7,7 @@ import random
 
 WIDTH = 1080
 HEIGHT = 720
-TICK_RATE = 500 #low is faster ticks
+TICK_RATE = 500 #low is faster tjicks
 POL_CAP = 5000
 
 
