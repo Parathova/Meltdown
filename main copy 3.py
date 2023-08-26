@@ -19,7 +19,7 @@ tab = 0 #count for which tab we are currently on (0-3)
 ticks = 0
 WIN = pyg.display.set_mode((WIDTH, HEIGHT))
 pyg.display.set_caption("Meltdown")
-pyg.display.set_icon(pyg.image.load("assets/img/icon.png"))
+pyg.display.set_icon(pyg.image.load("build/exe.win-amd64-3.10/assets/img/icon.png"))
 
 
 # Tab buttons (x, y, width, height)
@@ -81,7 +81,7 @@ buy = imgImport("buttons/buy.png", WIDTH*0.1, WIDTH*0.1)
 activ_bttn = imgImport("buttons/activ_bttn.png", WIDTH*0.1, HEIGHT*0.05)
 
 popup = False
-activ_rect = activ_bttn.get_rect(topleft=(0.615*WIDTH, 0.54*HEIGHT)) #please work PLEASE
+activ_rect = activ_bttn.get_rect(topleft=(0.615*WIDTH, 0.54*HEIGHT)) #sets a rectangle over image that will be used for collision detec for button
 
 pyg.font.init()
 doc_font = pyg.font.Font("assets/fonts/ShareTech.ttf", 16)
