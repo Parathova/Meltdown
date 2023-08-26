@@ -1,7 +1,3 @@
-
-
-
-
 import pygame as pyg
 import time
 import sys
@@ -166,6 +162,8 @@ def draw():
                 WIN.blit(buy, (WIDTH*0.20, HEIGHT*0.78))
             if(upgrade_track[0] > 2):
                 WIN.blit(buy, (WIDTH*0.35, HEIGHT*0.78))
+            if(upgrade_track[0] > 3):
+                WIN.blit(buy, (WIDTH*0.50, HEIGHT*0.78))
             
             # descriptions
             if (exp_prov_rect.collidepoint(mx, my)):
@@ -200,6 +198,8 @@ def draw():
                 WIN.blit(buy, (WIDTH*0.20, HEIGHT*0.78))
             if(upgrade_track[1] > 2):
                 WIN.blit(buy, (WIDTH*0.35, HEIGHT*0.78))
+            if(upgrade_track[0] > 3):
+                WIN.blit(buy, (WIDTH*0.50, HEIGHT*0.78))
             
             # descriptions
             if (pro_1_rect.collidepoint(mx, my)):
