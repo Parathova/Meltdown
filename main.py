@@ -1,6 +1,6 @@
 import pygame as pyg
 import time
-import sys
+import random
 
 
 
@@ -49,8 +49,9 @@ pro_4_rect = pyg.Rect(WIDTH*0.50, HEIGHT*0.78, WIDTH*0.1, WIDTH*0.1)
 pol_amt = 0.0 # tracks pollution amt
 money_amt = 10.0 # tracks money amt
 
-pol_rate = 0.5
+pol_rate = 100.5
 money_rate = 0.15
+pub_amt = pol_rate/5.0
 
 upgrade_track = [0, 0, 0]
 upgrade_costs = [
@@ -78,6 +79,8 @@ TAB3 = imgImport("tab3.png", WIDTH, 0.35*HEIGHT)
 TAB4 = imgImport("tab4.png", WIDTH, 0.35*HEIGHT)
 POL_BAR = imgImport("pol_bar.png", WIDTH*0.05, HEIGHT*0.5)
 NEWS_BOX = imgImport("news.png", WIDTH*.16, HEIGHT*.28)
+ACTIVE_INT = imgImport("activist.png", WIDTH*0.4, HEIGHT*0.4) #activists pop-up
+
 
 
 lock = imgImport("buttons/lock.png", WIDTH*0.1, WIDTH*0.1)
@@ -105,6 +108,12 @@ pro_2_des = imgImport("buttons/pro/pro_2_des.png", WIDTH*0.12, WIDTH*0.12)
 pro_3_des = imgImport("buttons/pro/pro_3_des.png", WIDTH*0.12, WIDTH*0.12)
 pro_4_des = imgImport("buttons/pro/pro_4_des.png", WIDTH*0.12, WIDTH*0.12)
 
+#activists
+activ_bttn = imgImport("buttons/activ_bttn.png", WIDTH*0.1, HEIGHT*0.05)
+
+#tracks activist activity
+popup = False
+activ_rect = activ_bttn.get_rect(topleft=(0.615*WIDTH, 0.54*HEIGHT))
 
 pyg.font.init()
 doc_font = pyg.font.Font("assets/fonts/ShareTech.ttf", 16)
@@ -125,10 +134,77 @@ def not_enough(required, current):
     print('not enough')
 
 
+activ_int = 1000*2 #1 second x 120, every 2 minutes it'll run the chance of event
+ 
+activ_count = 1
+
+def activ_inter():
+    global activ_int
+    global activ_count
+    if time_passed() >= activ_int*activ_count:
+        print("acti")
+        activ_count+= 1
+        activ_prob()
+        
+
+
+def activ_prob():
+   prob = random.randint(1,100) #the numbers represent the % chance of event happening 
+   print(prob, pub_amt)
+   if prob <= pub_amt*80 + 20:
+       gen_pop()
+       popup=True
+   
+        
+
+     
+
+def gen_pop():
+
+    global money_amt
+    global pub_amt
+    global pol_amt
+
+    type = random.randint(1,3)
+    if type == 1:
+        pub_prob = random.randint(10,40)
+        pub_loss = (pub_prob/100)*(pub_amt)
+        pub_amt -= pub_loss
+        activ_group = ['WeLoveLiving', 'StayGreen', 'ReduceReuseRefute', 'FightingCorpGreed', 'AreYouProud?']
+        list1_num = random.randint(0,4)
+        text = 'ACTIVIST INTERFERENCE: ' + activ_group[list1_num] + '  organization holds protests lasting 3 days, \n widespread public awareness campaign (Public Satisfaction down by: ' + str(round(pub_loss, 2)) + ")"
+        draw_text(text, 0.4*WIDTH, 0.32*HEIGHT, (255,255,255))
+        print("drawn1")
+
+    elif type ==2: 
+        mon_prob = random.randint(20,60)
+        money_loss = (mon_prob/100)*(money_amt) #why isn't this registering 
+        money_amt -= money_loss
+        activists = ['Public', 'Workers Union', 'Charity Group']
+        list2_num = random.randint(0,2)
+        text = 'ACTIVIST INTERFERENCE: ' + activists[list2_num] + ' *Company* for $' + str(money_loss)
+        draw_text(text, 0.4*WIDTH, 0.32*HEIGHT, (255,255,255))
+        print("drawn2")
+
+    elif type ==3: 
+        pol_prob = random.randint(10,30)
+        pol_loss = (pol_prob/100)*(pol_amt) #why isn't this registering 
+        print("pol loss", pol_loss, pol_amt)
+        pol_amt -= pol_loss
+        nerds = ['Child Prodigie invents new', 'Scientists improve', 'That one kid everyone knew was going to Harvard creates', 'Your archnemis spitefully makes a']
+        list3_num = random.randint(0,2)
+        text = ' Breaking News: ' + nerds[list3_num] + ' new carbon dioxide reversal tool that can aid in combating air pollution!\n (Pollution down by:' + str(round(pol_loss, 2)) + "ppm)"
+        draw_text(text, 0.4*WIDTH, 0.32*HEIGHT, (255,255,255))
+        print("drawn3")
+        
+
+
 
 def draw():
     
     mx, my = pyg.mouse.get_pos()
+
+    
 
     #WIN.fill((0, 0, 0))
     WIN.blit(BACKIMG, (0, 0)) #putting images at coordinates (origin top left)
@@ -137,7 +213,12 @@ def draw():
     WIN.blit(WORLDWATERPOLLUTION, (WIDTH*0.18, HEIGHT*0.05)) #draw the water background green
     WIN.blit(NEWS_BOX, (0.12*WIDTH, 0.3*HEIGHT))
     
-    
+    if popup == True: 
+        WIN.blit(ACTIVE_INT, (0.32*WIDTH, 0.2*HEIGHT))
+
+        WIN.blit(activ_bttn, (0.615*WIDTH, 0.54*HEIGHT))
+        gen_pop() #ELIMATE AFTER TESTING
+
     
     #tabs
     match tab:
@@ -241,11 +322,11 @@ def money_tick():
     money_amt += money_rate
 
 def main():
-    global tab, ticks, pol_rate, money_rate, pol_amt, money_amt, upgrade_track, alpha_Water
+    global tab, ticks, pol_rate, money_rate, pol_amt, money_amt, upgrade_track, alpha_Water, popup, pub_amt
     #clock = pyg.time.Clock() #controlls fps and whatnot
     pyg.mouse.set_cursor(pyg.cursors.diamond)
     
-     
+    print(pub_amt)
 
     run = True
     
@@ -254,7 +335,8 @@ def main():
     while run:
         #clock.tick(FPS) #again, controls fps 
         #print(time_passed())
-        print(money_rate)
+        pub_amt = 1#pol_rate/5.0
+        
         
 
         if(int(time_passed()/TICK_RATE) > ticks):
@@ -262,7 +344,8 @@ def main():
             pol_tick()
             money_tick()
             print("--------")
-            
+        
+        activ_inter()
 
         
         enough = False
@@ -399,7 +482,7 @@ def main():
         if time_passed() - warn["time"] <= 3000 and tab == warn["tab"]:
             
             draw_text(" !!    INSUFFICIENT FUNDS: $" + str(round(warn["had"], 2)) + "K / $" + str(warn["req"]) + "K    !!", WIDTH*0.68, HEIGHT*0.79, (0, 0, 0))
-            print("______________________________")
+            
 
         
         #updates display. display wont change if this isnt here

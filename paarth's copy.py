@@ -18,7 +18,7 @@ tab = 0 #count for which tab we are currently on (0-3)
 ticks = 0
 WIN = pyg.display.set_mode((WIDTH, HEIGHT))
 pyg.display.set_caption("Meltdown")
-pyg.display.set_icon(pyg.image.load("build/exe.win-amd64-3.10/assets/img/icon.png"))
+pyg.display.set_icon(pyg.image.load("assets/img/icon.png"))
 
 
 # Tab buttons (x, y, width, height)
@@ -53,7 +53,7 @@ Start = False
     
 #everything after this i think is loading the game
 def imgImport(name, w, h, rot=0):
-    return pyg.transform.rotate(pyg.transform.scale(pyg.image.load("build/exe.win-amd64-3.10/assets/img/" + name), (w, h)), rot)
+    return pyg.transform.rotate(pyg.transform.scale(pyg.image.load("assets/img/" + name), (w, h)), rot)
 
 
 #menu thingy hopefully it works
@@ -104,7 +104,7 @@ exp_glo_des = imgImport("buttons/exp/exp_glo_des.png", WIDTH*0.1, WIDTH*0.1)
 
 
 pyg.font.init()
-doc_font = pyg.font.Font("build/exe.win-amd64-3.10/assets/fonts/ShareTech.ttf", 16)
+doc_font = pyg.font.Font("assets/fonts/ShareTech.ttf", 16)
 
 
 
