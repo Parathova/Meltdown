@@ -1,3 +1,3 @@
 # Meltdown
-# Bonjour mes amis imma need a confirmation msg here for everyone to make sure the repo is working k thx - jaden
-# lemon-exe this is MicrophoneAle. Repository successfully cloned. Over.
+# Conquer (destroy) the world through capitalism, propaganda and tons of money.
+# We've developed a game that demonstrates climate change due to the pursuit of riches, AKA a Destroy the World Simulator
