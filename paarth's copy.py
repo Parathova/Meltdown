@@ -1,7 +1,4 @@
 
-
-
-
 import pygame as pyg
 import time
 import sys
@@ -18,7 +15,7 @@ tab = 0 #count for which tab we are currently on (0-3)
 ticks = 0
 WIN = pyg.display.set_mode((WIDTH, HEIGHT))
 pyg.display.set_caption("Meltdown")
-pyg.display.set_icon(pyg.image.load("assets/img/icon.png"))
+pyg.display.set_icon(pyg.image.load("dist/assets/img/icon.png"))
 
 
 # Tab buttons (x, y, width, height)
@@ -32,7 +29,6 @@ exp_prov_rect = pyg.Rect(WIDTH*0.05, HEIGHT*0.78, WIDTH*0.1, WIDTH*0.1)
 exp_nat_rect = pyg.Rect(WIDTH*0.20, HEIGHT*0.78, WIDTH*0.1, WIDTH*0.1)
 exp_con_rect = pyg.Rect(WIDTH*0.35, HEIGHT*0.78, WIDTH*0.1, WIDTH*0.1)
 exp_glo_rect = pyg.Rect(WIDTH*0.50, HEIGHT*0.78, WIDTH*0.1, WIDTH*0.1)
-
 
 
 #the bar covering the pollution img (to hide progress ig)
@@ -57,20 +53,85 @@ def imgImport(name, w, h, rot=0):
 
 
 #menu thingy hopefully it works
+#some variables im using for animations or somethin
+play_x = 0.5
+play_y = 0.5
+anipos_x = 0
+anipos_y = 0
+up = True
+msavex = 0
+msavey = 0
 pyg.init()
 while Start == False:
+    thisanimationwillworkisayso = False
+    mx, my = pyg.mouse.get_pos()
+    msavex = mx
+    msavey = my
     menuBackground = imgImport("menu/background.png", WIDTH, HEIGHT).convert()
-    WIN.blit(menuBackground,(100, 100))
-    print ('wolf')
+    play = imgImport("menu/playButton.png", play_x*WIDTH, play_y*HEIGHT)
+    play_rect = play.get_rect(topleft = (0.26*WIDTH, 0.695*HEIGHT))
+    WIN.blit(menuBackground,(0, 0))
     for event in pyg.event.get():
         if event.type == pyg.QUIT:
             pyg.quit()
-            exit()  
+            exit() 
         keys_pressed = pyg.key.get_pressed()
-        print(keys_pressed[pyg.K_SPACE])
+        if event.type == pyg.MOUSEBUTTONDOWN:
+            if play_rect.collidepoint(msavex, msavey):
+                Start = True
+        if play_rect.collidepoint(msavex, msavey):
+            if up == True:
+                play_x += 0.005
+                play_y += 0.005
+                anipos_x += 0.002*WIDTH
+                anipos_y += 0.001*HEIGHT
+                if play_x >= 0.55:
+                    up = False
+                thisanimationwillworkisayso = True
+            if up == False:
+                play_x -= 0.005
+                play_y -= 0.005
+                anipos_x -= 0.002*WIDTH
+                anipos_y -= 0.001*HEIGHT
+                if play_x <= 0.5:
+                    up = True
+                thisanimationwillworkisayso = True
         if keys_pressed[pyg.K_SPACE]:
+            print ('uh')
             Start = True
+    #trying to get the animation working but idk anymore
+    if thisanimationwillworkisayso == False:
+            WIN.blit(play, (0.26*WIDTH, 0.695*HEIGHT))
+    elif play_rect.collidepoint(msavex, msavey):
+        WIN.blit(play, (0.26*WIDTH-anipos_x, 0.695*HEIGHT-anipos_y))
+    pyg.display.update()
 
+#menu to select your name/ colony or whatever
+defont = pyg.font.Font(None, 40)
+player_name = ""
+Start = False
+while Start == False:
+    for event in pyg.event.get():
+        #get input for name 
+        keys_pressed = pyg.key.get_pressed()
+        if keys_pressed[pyg.K_RETURN]:
+            Start = True
+        if event.type == pyg.KEYDOWN:
+            player_name = player_name + pyg.key.name(event.key)
+        if keys_pressed[pyg.K_BACKSPACE]:
+            player_name = player_name.replace("backspace", "")
+            player_name = player_name[:-1]
+        player_name = player_name.replace("space", " ")
+        player_name = player_name.replace("return", "")
+    print (player_name)
+    text_surface = defont.render(player_name, None, (0, 255, 255))
+    name_popup = imgImport('news.png', 0.5*WIDTH, 0.6*HEIGHT)
+    WIN.blit(name_popup, (0.37*HEIGHT, 0.2*WIDTH))
+    WIN.blit(text_surface, (0.37*HEIGHT+20, 0.2*WIDTH+100))
+    pyg.display.update()
+    
+            
+#stop main menu music:
 EPOCH = time.time() * 1000
 BACKIMG = imgImport("background_img.png", WIDTH, HEIGHT)
 
