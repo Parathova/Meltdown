@@ -10,6 +10,13 @@ HEIGHT = 720
 TICK_RATE = 500 #low is faster ticks
 POL_CAP = 5000
 
+
+def imgImport(name, w, h, rot=0):
+    return pyg.transform.rotate(pyg.transform.scale(pyg.image.load("dist/assets/img/" + name), (w, h)), rot)
+
+
+company_name = "Vought"
+popup = False
 tab = 0 #count for which tab we are currently on (0-3)
 ticks = 0
 warn_time = [0, 0, 1, -1] #[time, have, required, tab] 
@@ -21,7 +28,7 @@ warn = {
 }
 WIN = pyg.display.set_mode((WIDTH, HEIGHT))
 pyg.display.set_caption("Meltdown")
-pyg.display.set_icon(pyg.image.load("assets/img/icon.png"))
+pyg.display.set_icon(pyg.image.load("dist/assets/img/icon.png"))
 
 
 # Tab buttons (x, y, width, height)
@@ -43,6 +50,11 @@ pro_3_rect = pyg.Rect(WIDTH*0.35, HEIGHT*0.78, WIDTH*0.1, WIDTH*0.1)
 pro_4_rect = pyg.Rect(WIDTH*0.50, HEIGHT*0.78, WIDTH*0.1, WIDTH*0.1)
 
 
+activ_bttn = imgImport("buttons/activ_bttn.png", WIDTH*0.1, HEIGHT*0.05)
+
+
+activ_rect = activ_bttn.get_rect(topleft=(0.615*WIDTH, 0.54*HEIGHT))
+
 #the bar covering the pollution img (to hide progress ig)
 #pol_bar_rect = pyg.Rect(WIDTH*0.025, HEIGHT*0.1223, WIDTH*0.045, HEIGHT*0.415)
 
@@ -58,10 +70,13 @@ upgrade_costs = [
     [40, 100, 540, 1200],
     [10, 200, 1150, 1900]
 ]
-news_queue = []
+popup_info = {
+    "type": -1, # 0, 1 or 2
+    "name": "group name",
+    "amt": -1 #amt deduction for wtv
+}
 
-def imgImport(name, w, h, rot=0):
-    return pyg.transform.rotate(pyg.transform.scale(pyg.image.load("assets/img/" + name), (w, h)), rot)
+
 
 EPOCH = time.time() * 1000
 BACKIMG = imgImport("background_img.png", WIDTH, HEIGHT)
@@ -108,15 +123,9 @@ pro_2_des = imgImport("buttons/pro/pro_2_des.png", WIDTH*0.12, WIDTH*0.12)
 pro_3_des = imgImport("buttons/pro/pro_3_des.png", WIDTH*0.12, WIDTH*0.12)
 pro_4_des = imgImport("buttons/pro/pro_4_des.png", WIDTH*0.12, WIDTH*0.12)
 
-#activists
-activ_bttn = imgImport("buttons/activ_bttn.png", WIDTH*0.1, HEIGHT*0.05)
-
-#tracks activist activity
-popup = False
-activ_rect = activ_bttn.get_rect(topleft=(0.615*WIDTH, 0.54*HEIGHT))
 
 pyg.font.init()
-doc_font = pyg.font.Font("assets/fonts/ShareTech.ttf", 16)
+doc_font = pyg.font.Font("dist/assets/fonts/ShareTech.ttf", 16)
 
 
 
@@ -149,21 +158,19 @@ def activ_inter():
 
 
 def activ_prob():
+   global popup
    prob = random.randint(1,100) #the numbers represent the % chance of event happening 
    print(prob, pub_amt)
    if prob <= pub_amt*80 + 20:
-       gen_pop()
+       init_act()
        popup=True
    
         
 
      
 
-def gen_pop():
-
-    global money_amt
-    global pub_amt
-    global pol_amt
+def init_act():
+    global pol_amt, pub_amt, money_amt, popup_info
 
     type = random.randint(1,3)
     if type == 1:
@@ -172,8 +179,12 @@ def gen_pop():
         pub_amt -= pub_loss
         activ_group = ['WeLoveLiving', 'StayGreen', 'ReduceReuseRefute', 'FightingCorpGreed', 'AreYouProud?']
         list1_num = random.randint(0,4)
-        text = 'ACTIVIST INTERFERENCE: ' + activ_group[list1_num] + '  organization holds protests lasting 3 days, \n widespread public awareness campaign (Public Satisfaction down by: ' + str(round(pub_loss, 2)) + ")"
-        draw_text(text, 0.4*WIDTH, 0.32*HEIGHT, (255,255,255))
+#        text = 'ACTIVIST INTERFERENCE: ' + activ_group[list1_num] + '  organization holds protests lasting 3 days, \n widespread public awareness campaign (Public Satisfaction down by: ' + str(round(pub_loss, 2)) + ")"
+        popup_info["type"] = 0
+        popup_info["name"] = activ_group[list1_num]
+        popup_info["amt"] = round(pub_loss, 2)
+        
+        #draw_text(text, 0.4*WIDTH, 0.32*HEIGHT, (255,255,255))
         print("drawn1")
 
     elif type ==2: 
@@ -182,8 +193,13 @@ def gen_pop():
         money_amt -= money_loss
         activists = ['Public', 'Workers Union', 'Charity Group']
         list2_num = random.randint(0,2)
-        text = 'ACTIVIST INTERFERENCE: ' + activists[list2_num] + ' *Company* for $' + str(money_loss)
-        draw_text(text, 0.4*WIDTH, 0.32*HEIGHT, (255,255,255))
+        #text = 'ACTIVIST INTERFERENCE: ' + activists[list2_num] + ' *Company* for $' + str(money_loss)
+        
+        popup_info["type"] = 1
+        popup_info["name"] = activists[list2_num]
+        popup_info["amt"] = round(money_loss, 2)
+
+        #draw_text(text, 0.4*WIDTH, 0.32*HEIGHT, (255,255,255))
         print("drawn2")
 
     elif type ==3: 
@@ -193,12 +209,29 @@ def gen_pop():
         pol_amt -= pol_loss
         nerds = ['Child Prodigie invents new', 'Scientists improve', 'That one kid everyone knew was going to Harvard creates', 'Your archnemis spitefully makes a']
         list3_num = random.randint(0,2)
-        text = ' Breaking News: ' + nerds[list3_num] + ' new carbon dioxide reversal tool that can aid in combating air pollution!\n (Pollution down by:' + str(round(pol_loss, 2)) + "ppm)"
-        draw_text(text, 0.4*WIDTH, 0.32*HEIGHT, (255,255,255))
+        #text = ' Breaking News: ' + nerds[list3_num] + ' new carbon dioxide reversal tool that can aid in combating air pollution!\n (Pollution down by:' + str(round(pol_loss, 2)) + "ppm)"
+
+        popup_info["type"] = 2
+        popup_info['name'] = nerds[list3_num]
+        popup_info['amt'] = round(pol_loss, 2)
+
+
+        #draw_text(text, 0.4*WIDTH, 0.32*HEIGHT, (255,255,255))
         print("drawn3")
         
 
 
+def gen_pop():
+    text = ""
+    if popup_info["type"] == 0:
+        text = ('ACTIVIST INTERFERENCE: ' + popup_info["name"] + 
+        '  organization holds protests lasting 3 days, \n widespread public awareness campaign (Public Satisfaction down by: ' + str(popup_info["amt"]) + ")")
+    elif popup_info["type"] == 1:
+        text = 'ACTIVIST INTERFERENCE: ' + popup_info["name"] + ' sues ' + company_name + ' for $' + str(popup_info["amt"]) + "K."
+    elif popup_info["type"] == 2:
+        text = ' Breaking News: ' + popup_info["name"] + ' new carbon dioxide reversal tool that can aid in combating air pollution!\n (Pollution down by:' + str(popup_info["amt"]) + "ppm)"
+
+    draw_text(text, 0.4*WIDTH, 0.32*HEIGHT, (55, 45 , 51))
 
 def draw():
     
@@ -305,6 +338,8 @@ def draw():
     pyg.draw.rect(WIN, (96, 107, 94), pyg.Rect(WIDTH*0.035, HEIGHT*0.1525, WIDTH*0.045, HEIGHT*0.415*(1 - pol_amt/POL_CAP)))
 
 
+    
+
 
 
     # balance text
@@ -355,6 +390,13 @@ def main():
             if event.type == pyg.MOUSEBUTTONDOWN:
                 if event.button == 1: #left/primary click
                     mx, my = pyg.mouse.get_pos()
+
+                    if activ_rect.collidepoint(mx, my):
+          
+                        if pyg.mouse.get_pressed()[0] == 1:
+                            print("Clicked")
+                            popup=False
+                            print(popup)
                     if tab1_rect.collidepoint(mx, my) and tab != 0:
                         #money_tick(5)
                         #print("clicked1")
@@ -483,7 +525,9 @@ def main():
             
             draw_text(" !!    INSUFFICIENT FUNDS: $" + str(round(warn["had"], 2)) + "K / $" + str(warn["req"]) + "K    !!", WIDTH*0.68, HEIGHT*0.79, (0, 0, 0))
             
-
+        if(popup):
+            print('gen pop')
+            gen_pop()
         
         #updates display. display wont change if this isnt here
         pyg.display.update()
