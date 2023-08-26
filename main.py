@@ -60,7 +60,7 @@ upgrade_costs = [
 news_queue = []
 
 def imgImport(name, w, h, rot=0):
-    return pyg.transform.rotate(pyg.transform.scale(pyg.image.load("build\exe.win-amd64-3.10\assets\img" + name), (w, h)), rot)
+    return pyg.transform.rotate(pyg.transform.scale(pyg.image.load("build/exe.win-amd64-3.10/assets/img" + name), (w, h)), rot)
 
 EPOCH = time.time() * 1000
 BACKIMG = imgImport("background_img.png", WIDTH, HEIGHT)
