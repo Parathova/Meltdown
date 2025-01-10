@@ -2,12 +2,18 @@
 # Conquer (destroy) the world through capitalism, propaganda and tons of money.
 # We've developed a game that demonstrates climate change due to the pursuit of riches, AKA a Destroy the World Simulator
 
-**Devpost Presentation for Hackathon:** https://devpost.com/software/meltdown-w2m6js
-Created By: 
-Jaden Zhang
-Michael Liu
-Parto Tolouashtiany
-Paarth Vaish
+**Devpost Presentation for Hackathon:** https://devpost.com/software/meltdown-w2m6js  
+
+Created By:  
+
+Jaden Zhang  
+
+Michael Liu  
+
+Parto Tolouashtiany  
+
+Paarth Vaish  
+
 
 ![Meltdown1](https://github.com/user-attachments/assets/8648e0d1-4bc5-42f2-adbd-636a9bc77342)
 ![Meltdown2](https://github.com/user-attachments/assets/2626949f-dfa2-4294-9679-cf08b1e76857)
