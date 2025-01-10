@@ -3,6 +3,7 @@
 # We've developed a game that demonstrates climate change due to the pursuit of riches, AKA a Destroy the World Simulator
 
 **Devpost Presentation for Hackathon:** https://devpost.com/software/meltdown-w2m6js  
+Please note: If you watch the video, do so on 2x speed for your own sanity. I apologize for my presentation skills here, none of us had slept and I had less than an hour to record, edit, and publish this. 
 
 Created By:  
 
